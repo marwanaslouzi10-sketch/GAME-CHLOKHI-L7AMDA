@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dog Jump Game</title>
+<title>Dog Jump V3</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 html,body{
@@ -17,34 +19,33 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:Arial,sans-serif;
-    background:#8ed8ff;
     touch-action:none;
 }
 
 #game{
     position:relative;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     overflow:hidden;
     background:linear-gradient(
-        #70c9ff 0%,
-        #c8efff 70%,
-        #e9f9ff 100%
+        #72c9ff 0%,
+        #dff6ff 72%,
+        #ffffff 100%
     );
 }
 
-/* الشمس */
+/* SUN */
 #sun{
     position:absolute;
-    width:75px;
-    height:75px;
-    background:#ffd83d;
-    border-radius:50%;
     top:35px;
-    right:40px;
+    right:35px;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#ffd83d;
 }
 
-/* Score */
+/* SCORE */
 #score{
     position:absolute;
     top:20px;
@@ -55,7 +56,21 @@ html,body{
     color:#111;
 }
 
-/* الأرض */
+/* DOG */
+#dog{
+    position:absolute;
+    left:80px;
+    bottom:95px;
+    width:65px;
+    height:65px;
+    font-size:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:20;
+}
+
+/* GROUND */
 #ground{
     position:absolute;
     left:0;
@@ -63,94 +78,98 @@ html,body{
     width:100%;
     height:95px;
     background:#4caf50;
-    border-top:7px solid #28752d;
+    border-top:7px solid #286e2c;
 }
 
-/* الكلب */
-#dog{
-    position:absolute;
-    left:75px;
-    bottom:95px;
-    width:70px;
-    height:70px;
-    font-size:60px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:20;
-}
-
-/* السور */
+/* WALL */
 .wall{
     position:absolute;
     right:-80px;
     bottom:95px;
     width:58px;
-    height:78px;
+    height:75px;
+
     background:
-        repeating-linear-gradient(
-            90deg,
-            #7b3f18 0px,
-            #7b3f18 12px,
-            #9a5423 12px,
-            #9a5423 24px
-        );
-    border:5px solid #54270c;
+    repeating-linear-gradient(
+        90deg,
+        #754018 0px,
+        #754018 12px,
+        #995321 12px,
+        #995321 24px
+    );
+
+    border:5px solid #54280c;
     border-radius:4px;
+
     z-index:10;
 }
 
-/* زر القفز */
+/* JUMP BUTTON */
 #jump{
     position:absolute;
     right:25px;
     bottom:120px;
+
     width:145px;
     height:68px;
-    border:none;
+
+    border:0;
     border-radius:35px;
+
     background:#e53935;
     color:white;
+
     font-size:22px;
     font-weight:bold;
+
     z-index:100;
-    box-shadow:0 6px 0 #a51d1a;
+
+    box-shadow:0 6px 0 #a71916;
 }
 
 #jump:active{
     transform:translateY(5px);
-    box-shadow:0 1px 0 #a51d1a;
+    box-shadow:0 1px 0 #a71916;
 }
 
-/* Game Over */
-#over{
+/* GAME OVER */
+#gameOver{
     position:absolute;
     inset:0;
+
     display:none;
+
     align-items:center;
     justify-content:center;
     flex-direction:column;
+
     background:rgba(0,0,0,.72);
+
     color:white;
+
     z-index:200;
 }
 
-#over h1{
+#gameOver h1{
     font-size:44px;
-    margin-bottom:10px;
+    margin-bottom:12px;
 }
 
-#over p{
+#finalScore{
     font-size:23px;
 }
 
 #restart{
     margin-top:22px;
+
     padding:14px 35px;
+
     border:0;
     border-radius:30px;
+
     background:#2196f3;
     color:white;
+
     font-size:20px;
     font-weight:bold;
 }
@@ -177,85 +196,134 @@ html,body{
         JUMP 🦘
     </button>
 
-    <div id="over">
+    <div id="gameOver">
+
         <h1>GAME OVER 💥</h1>
-        <p id="final">Score: 0</p>
+
+        <div id="finalScore">
+            Score: 0
+        </div>
+
         <button id="restart">
             RESTART 🔄
         </button>
+
     </div>
 
 </div>
 
+
 <script>
 
-/* =========================
-   GAME VARIABLES
-========================= */
+/* ==============================
+   ELEMENTS
+============================== */
 
-const dog = document.getElementById("dog");
-const game = document.getElementById("game");
-const jumpButton = document.getElementById("jump");
-const scoreElement = document.getElementById("score");
-const gameOver = document.getElementById("over");
-const finalScore = document.getElementById("final");
-const restart = document.getElementById("restart");
+const dog =
+    document.getElementById("dog");
 
+const game =
+    document.getElementById("game");
+
+const jumpButton =
+    document.getElementById("jump");
+
+const scoreText =
+    document.getElementById("score");
+
+const gameOverScreen =
+    document.getElementById("gameOver");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const restart =
+    document.getElementById("restart");
+
+
+/* ==============================
+   VARIABLES
+============================== */
 
 let playing = true;
 
-let dogHeight = 0;
+let dogY = 0;
 
 let velocity = 0;
 
 let jumping = false;
 
 
-/*
-   قفزة أقصر وواقعية
-*/
-const jumpPower = 11;
+/* PHYSICS */
+
 const gravity = 0.72;
 
+const jumpPower = 11;
 
-/* السرعة */
+
+/* GAME */
+
 let speed = 5;
 
-
-/* النقاط */
 let score = 0;
 
-
-/* الأسوار */
 let walls = [];
 
 
-/* وقت ظهور السور */
-let spawnTime = 0;
+/*
+   Timer ديال السور
+*/
+
+let spawnTimer = 0;
 
 
-/* =========================
+/*
+   الوقت العشوائي بين الأسوار
+*/
+
+let nextWallTime =
+    randomBetween(120,180);
+
+
+/* ==============================
+   RANDOM NUMBER
+============================== */
+
+function randomBetween(min,max){
+
+    return Math.floor(
+        Math.random() *
+        (max - min + 1)
+    ) + min;
+
+}
+
+
+/* ==============================
    JUMP
-========================= */
+============================== */
 
 function jump(){
 
-    if(!playing) return;
+    if(!playing)
+        return;
 
     /*
-       ما نسمحوش بالقفز
-       وسط قفزة أخرى
+       ما يمكنش تقفز
+       وانت باقي فالهواء
     */
 
-    if(jumping) return;
+    if(jumping)
+        return;
 
     jumping = true;
 
     velocity = jumpPower;
+
 }
 
 
-/* زر الهاتف */
+/* MOBILE */
 
 jumpButton.addEventListener(
     "touchstart",
@@ -270,19 +338,15 @@ jumpButton.addEventListener(
 );
 
 
-/* الضغط العادي */
+/* CLICK */
 
 jumpButton.addEventListener(
     "click",
-    function(){
-
-        jump();
-
-    }
+    jump
 );
 
 
-/* Keyboard */
+/* KEYBOARD */
 
 document.addEventListener(
     "keydown",
@@ -303,9 +367,9 @@ document.addEventListener(
 );
 
 
-/* =========================
+/* ==============================
    CREATE WALL
-========================= */
+============================== */
 
 function createWall(){
 
@@ -314,66 +378,107 @@ function createWall(){
 
     wall.className = "wall";
 
-    wall.style.right = "-80px";
+    wall.style.right =
+        "-80px";
 
     game.appendChild(wall);
 
     walls.push({
+
         element:wall,
+
         passed:false
+
     });
+
 }
 
 
-/* =========================
+/* ==============================
    COLLISION
-========================= */
+============================== */
 
-function isColliding(){
+function checkCollision(){
 
     const dogBox =
         dog.getBoundingClientRect();
 
 
     /*
-       كنصغرو منطقة الاصطدام
-       شوية باش اللعبة تكون عادلة
+       نصغرو hitbox ديال الكلب
+       باش الاصطدام يكون عادل
     */
 
     const dogLeft =
-        dogBox.left + 12;
+        dogBox.left + 18;
 
     const dogRight =
-        dogBox.right - 12;
+        dogBox.right - 18;
 
     const dogTop =
         dogBox.top + 12;
 
     const dogBottom =
-        dogBox.bottom - 5;
+        dogBox.bottom - 7;
 
 
     for(const wall of walls){
 
-        const box =
+        const wallBox =
             wall.element.getBoundingClientRect();
 
 
         /*
-           غير ملي السور يكون قريب
+           إذا كان السور بعيد
+           على الكلب، ما نفحصوهش
+        */
+
+        if(
+            wallBox.left >
+            dogRight + 5
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+           إذا السور داز من الكلب
+        */
+
+        if(
+            wallBox.right <
+            dogLeft
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+           الاصطدام الحقيقي
         */
 
         const horizontal =
-            dogRight > box.left &&
-            dogLeft < box.right;
+            dogRight >
+            wallBox.left &&
+            dogLeft <
+            wallBox.right;
 
 
         const vertical =
-            dogBottom > box.top &&
-            dogTop < box.bottom;
+            dogBottom >
+            wallBox.top &&
+            dogTop <
+            wallBox.bottom;
 
 
-        if(horizontal && vertical){
+        if(
+            horizontal &&
+            vertical
+        ){
 
             return true;
 
@@ -381,88 +486,103 @@ function isColliding(){
 
     }
 
+
     return false;
+
 }
 
 
-/* =========================
+/* ==============================
    GAME OVER
-========================= */
+============================== */
 
 function endGame(){
 
     playing = false;
 
     finalScore.textContent =
-        "Score: " + Math.floor(score);
+        "Score: " +
+        Math.floor(score);
 
-    gameOver.style.display =
+    gameOverScreen.style.display =
         "flex";
+
 }
 
 
-/* =========================
-   MAIN GAME LOOP
-========================= */
+/* ==============================
+   GAME LOOP
+============================== */
 
-function gameLoop(){
+function update(){
 
-    if(!playing) return;
+    if(!playing)
+        return;
 
 
-    /* =================
+    /* ==========================
        DOG PHYSICS
-    ================= */
+    ========================== */
 
     if(jumping){
 
-        dogHeight += velocity;
+        dogY += velocity;
 
         velocity -= gravity;
 
 
         /*
-           رجوع للأرض
+           ملي يوصل للأرض
         */
 
-        if(dogHeight <= 0){
+        if(dogY <= 0){
 
-            dogHeight = 0;
+            dogY = 0;
 
             velocity = 0;
 
             jumping = false;
+
         }
+
     }
 
 
     dog.style.bottom =
-        (95 + dogHeight) + "px";
+        (95 + dogY) + "px";
 
 
-    /* =================
-       CREATE WALLS
-    ================= */
+    /* ==========================
+       SPAWN WALL
+    ========================== */
 
-    spawnTime++;
+    spawnTimer++;
 
 
-    /*
-       المسافة بين الأسوار
-       ماشي قريبة بزاف
-    */
-
-    if(spawnTime >= 135){
+    if(
+        spawnTimer >=
+        nextWallTime
+    ){
 
         createWall();
 
-        spawnTime = 0;
+        spawnTimer = 0;
+
+
+        /*
+           مسافة عشوائية
+           بين الأسوار
+        */
+
+        nextWallTime =
+            randomBetween(120,180);
+
     }
 
 
-    /* =================
+    /* ==========================
        MOVE WALLS
-    ================= */
+    ========================== */
 
     for(
         let i = walls.length - 1;
@@ -470,7 +590,8 @@ function gameLoop(){
         i--
     ){
 
-        const wall = walls[i];
+        const wall =
+            walls[i];
 
         const element =
             wall.element;
@@ -478,27 +599,35 @@ function gameLoop(){
 
         let right =
             parseFloat(
-                getComputedStyle(element).right
+                getComputedStyle(
+                    element
+                ).right
             );
 
 
         right += speed;
 
+
         element.style.right =
             right + "px";
 
 
-        /* Collision */
+        /* ======================
+           COLLISION
+        ====================== */
 
-        if(isColliding()){
+        if(checkCollision()){
 
             endGame();
 
             return;
+
         }
 
 
-        /* Score */
+        /* ======================
+           SCORE
+        ====================== */
 
         const wallBox =
             element.getBoundingClientRect();
@@ -509,16 +638,20 @@ function gameLoop(){
 
         if(
             !wall.passed &&
-            wallBox.right < dogBox.left
+            wallBox.right <
+            dogBox.left
         ){
 
             wall.passed = true;
 
             score += 10;
+
         }
 
 
-        /* حذف السور القديم */
+        /* ======================
+           REMOVE WALL
+        ====================== */
 
         if(
             right >
@@ -528,31 +661,36 @@ function gameLoop(){
             element.remove();
 
             walls.splice(i,1);
+
         }
+
     }
 
 
-    /* نقاط الوقت */
+    /* TIME SCORE */
 
     score += 0.02;
 
-    scoreElement.textContent =
+    scoreText.textContent =
         "Score: " +
         Math.floor(score);
 
 
-    /* زيادة الصعوبة تدريجيا */
+    /* ==========================
+       DIFFICULTY
+    ========================== */
 
     speed += 0.00025;
 
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(update);
+
 }
 
 
-/* =========================
+/* ==============================
    RESTART
-========================= */
+============================== */
 
 restart.addEventListener(
     "click",
@@ -564,11 +702,11 @@ restart.addEventListener(
 );
 
 
-/* =========================
-   START GAME
-========================= */
+/* ==============================
+   START
+============================== */
 
-gameLoop();
+update();
 
 </script>
 
