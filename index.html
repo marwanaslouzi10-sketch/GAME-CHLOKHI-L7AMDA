@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dog Jump V3</title>
+
+<title>Dog Jump</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -27,67 +29,100 @@ html,body{
     width:100vw;
     height:100vh;
     overflow:hidden;
+
     background:linear-gradient(
-        #72c9ff 0%,
-        #dff6ff 72%,
-        #ffffff 100%
+        #70c9ff,
+        #dff6ff 75%,
+        #ffffff
     );
 }
 
-/* SUN */
+
+/* الشمس */
+
 #sun{
     position:absolute;
+
     top:35px;
     right:35px;
+
     width:70px;
     height:70px;
-    border-radius:50%;
+
     background:#ffd83d;
+
+    border-radius:50%;
 }
+
 
 /* SCORE */
+
 #score{
     position:absolute;
+
     top:20px;
     left:20px;
-    z-index:50;
+
     font-size:25px;
     font-weight:bold;
+
     color:#111;
+
+    z-index:50;
 }
 
+
 /* DOG */
+
 #dog{
     position:absolute;
+
     left:80px;
     bottom:95px;
+
     width:65px;
     height:65px;
+
     font-size:56px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     z-index:20;
 }
 
+
 /* GROUND */
+
 #ground{
     position:absolute;
+
     left:0;
     bottom:0;
+
     width:100%;
     height:95px;
+
     background:#4caf50;
+
     border-top:7px solid #286e2c;
 }
 
+
 /* WALL */
+
 .wall{
     position:absolute;
+
     right:-80px;
     bottom:95px;
+
     width:58px;
-    height:75px;
+
+    /* نقصنا العلو */
+
+    height:65px;
 
     background:
     repeating-linear-gradient(
@@ -99,48 +134,68 @@ html,body{
     );
 
     border:5px solid #54280c;
+
     border-radius:4px;
 
     z-index:10;
 }
 
+
 /* JUMP BUTTON */
+
 #jump{
+
     position:absolute;
+
     right:25px;
+
+    /* طلعناه شوية */
+
     bottom:120px;
 
     width:145px;
     height:68px;
 
-    border:0;
+    border:none;
+
     border-radius:35px;
 
     background:#e53935;
+
     color:white;
 
     font-size:22px;
+
     font-weight:bold;
 
     z-index:100;
 
-    box-shadow:0 6px 0 #a71916;
+    box-shadow:
+        0 6px 0 #a71916;
 }
 
 #jump:active{
+
     transform:translateY(5px);
-    box-shadow:0 1px 0 #a71916;
+
+    box-shadow:
+        0 1px 0 #a71916;
 }
 
+
 /* GAME OVER */
+
 #gameOver{
+
     position:absolute;
+
     inset:0;
 
     display:none;
 
     align-items:center;
     justify-content:center;
+
     flex-direction:column;
 
     background:rgba(0,0,0,.72);
@@ -151,30 +206,39 @@ html,body{
 }
 
 #gameOver h1{
+
     font-size:44px;
+
     margin-bottom:12px;
 }
 
 #finalScore{
+
     font-size:23px;
 }
 
 #restart{
+
     margin-top:22px;
 
     padding:14px 35px;
 
-    border:0;
+    border:none;
+
     border-radius:30px;
 
     background:#2196f3;
+
     color:white;
 
     font-size:20px;
+
     font-weight:bold;
 }
+
 </style>
 </head>
+
 
 <body>
 
@@ -198,7 +262,9 @@ html,body{
 
     <div id="gameOver">
 
-        <h1>GAME OVER 💥</h1>
+        <h1>
+            GAME OVER 💥
+        </h1>
 
         <div id="finalScore">
             Score: 0
@@ -215,9 +281,9 @@ html,body{
 
 <script>
 
-/* ==============================
+/* =========================
    ELEMENTS
-============================== */
+========================= */
 
 const dog =
     document.getElementById("dog");
@@ -241,9 +307,9 @@ const restart =
     document.getElementById("restart");
 
 
-/* ==============================
-   VARIABLES
-============================== */
+/* =========================
+   GAME VARIABLES
+========================= */
 
 let playing = true;
 
@@ -254,40 +320,49 @@ let velocity = 0;
 let jumping = false;
 
 
-/* PHYSICS */
+/* =========================
+   PHYSICS
+========================= */
 
-const gravity = 0.72;
+/* القفزة الجديدة */
 
-const jumpPower = 11;
+const jumpPower = 13;
+
+const gravity = 0.75;
 
 
-/* GAME */
+/* سرعة اللعبة */
 
 let speed = 5;
 
+
+/* Score */
+
 let score = 0;
+
+
+/* الأسوار */
 
 let walls = [];
 
 
-/*
-   Timer ديال السور
-*/
+/* Timer */
 
 let spawnTimer = 0;
 
 
 /*
-   الوقت العشوائي بين الأسوار
+   مسافة أكبر شوية
+   بين الأسوار
 */
 
-let nextWallTime =
-    randomBetween(120,180);
+let nextWall =
+    randomBetween(135,195);
 
 
-/* ==============================
-   RANDOM NUMBER
-============================== */
+/* =========================
+   RANDOM
+========================= */
 
 function randomBetween(min,max){
 
@@ -295,23 +370,17 @@ function randomBetween(min,max){
         Math.random() *
         (max - min + 1)
     ) + min;
-
 }
 
 
-/* ==============================
+/* =========================
    JUMP
-============================== */
+========================= */
 
 function jump(){
 
     if(!playing)
         return;
-
-    /*
-       ما يمكنش تقفز
-       وانت باقي فالهواء
-    */
 
     if(jumping)
         return;
@@ -319,11 +388,10 @@ function jump(){
     jumping = true;
 
     velocity = jumpPower;
-
 }
 
 
-/* MOBILE */
+/* الهاتف */
 
 jumpButton.addEventListener(
     "touchstart",
@@ -338,7 +406,7 @@ jumpButton.addEventListener(
 );
 
 
-/* CLICK */
+/* الضغط العادي */
 
 jumpButton.addEventListener(
     "click",
@@ -346,7 +414,7 @@ jumpButton.addEventListener(
 );
 
 
-/* KEYBOARD */
+/* الكمبيوتر */
 
 document.addEventListener(
     "keydown",
@@ -360,23 +428,23 @@ document.addEventListener(
             e.preventDefault();
 
             jump();
-
         }
 
     }
 );
 
 
-/* ==============================
+/* =========================
    CREATE WALL
-============================== */
+========================= */
 
 function createWall(){
 
     const wall =
         document.createElement("div");
 
-    wall.className = "wall";
+    wall.className =
+        "wall";
 
     wall.style.right =
         "-80px";
@@ -390,13 +458,12 @@ function createWall(){
         passed:false
 
     });
-
 }
 
 
-/* ==============================
+/* =========================
    COLLISION
-============================== */
+========================= */
 
 function checkCollision(){
 
@@ -405,8 +472,7 @@ function checkCollision(){
 
 
     /*
-       نصغرو hitbox ديال الكلب
-       باش الاصطدام يكون عادل
+       Hitbox أصغر من الكلب
     */
 
     const dogLeft =
@@ -429,8 +495,8 @@ function checkCollision(){
 
 
         /*
-           إذا كان السور بعيد
-           على الكلب، ما نفحصوهش
+           السور بعيد
+           ما نديروش collision
         */
 
         if(
@@ -439,12 +505,11 @@ function checkCollision(){
         ){
 
             continue;
-
         }
 
 
         /*
-           إذا السور داز من الكلب
+           السور داز
         */
 
         if(
@@ -453,7 +518,6 @@ function checkCollision(){
         ){
 
             continue;
-
         }
 
 
@@ -481,20 +545,17 @@ function checkCollision(){
         ){
 
             return true;
-
         }
 
     }
 
-
     return false;
-
 }
 
 
-/* ==============================
+/* =========================
    GAME OVER
-============================== */
+========================= */
 
 function endGame(){
 
@@ -506,13 +567,12 @@ function endGame(){
 
     gameOverScreen.style.display =
         "flex";
-
 }
 
 
-/* ==============================
+/* =========================
    GAME LOOP
-============================== */
+========================= */
 
 function update(){
 
@@ -520,9 +580,9 @@ function update(){
         return;
 
 
-    /* ==========================
+    /* =====================
        DOG PHYSICS
-    ========================== */
+    ===================== */
 
     if(jumping){
 
@@ -532,7 +592,7 @@ function update(){
 
 
         /*
-           ملي يوصل للأرض
+           يرجع للأرض
         */
 
         if(dogY <= 0){
@@ -542,9 +602,7 @@ function update(){
             velocity = 0;
 
             jumping = false;
-
         }
-
     }
 
 
@@ -552,16 +610,16 @@ function update(){
         (95 + dogY) + "px";
 
 
-    /* ==========================
+    /* =====================
        SPAWN WALL
-    ========================== */
+    ===================== */
 
     spawnTimer++;
 
 
     if(
         spawnTimer >=
-        nextWallTime
+        nextWall
     ){
 
         createWall();
@@ -571,18 +629,19 @@ function update(){
 
         /*
            مسافة عشوائية
-           بين الأسوار
         */
 
-        nextWallTime =
-            randomBetween(120,180);
-
+        nextWall =
+            randomBetween(
+                135,
+                195
+            );
     }
 
 
-    /* ==========================
+    /* =====================
        MOVE WALLS
-    ========================== */
+    ===================== */
 
     for(
         let i = walls.length - 1;
@@ -612,22 +671,19 @@ function update(){
             right + "px";
 
 
-        /* ======================
-           COLLISION
-        ====================== */
+        /* Collision */
 
         if(checkCollision()){
 
             endGame();
 
             return;
-
         }
 
 
-        /* ======================
+        /* =================
            SCORE
-        ====================== */
+        ================= */
 
         const wallBox =
             element.getBoundingClientRect();
@@ -645,13 +701,10 @@ function update(){
             wall.passed = true;
 
             score += 10;
-
         }
 
 
-        /* ======================
-           REMOVE WALL
-        ====================== */
+        /* حذف السور */
 
         if(
             right >
@@ -661,36 +714,32 @@ function update(){
             element.remove();
 
             walls.splice(i,1);
-
         }
-
     }
 
 
-    /* TIME SCORE */
+    /* Score مع الوقت */
 
     score += 0.02;
+
 
     scoreText.textContent =
         "Score: " +
         Math.floor(score);
 
 
-    /* ==========================
-       DIFFICULTY
-    ========================== */
+    /* زيادة الصعوبة ببطء */
 
-    speed += 0.00025;
+    speed += 0.0002;
 
 
     requestAnimationFrame(update);
-
 }
 
 
-/* ==============================
+/* =========================
    RESTART
-============================== */
+========================= */
 
 restart.addEventListener(
     "click",
@@ -702,9 +751,9 @@ restart.addEventListener(
 );
 
 
-/* ==============================
+/* =========================
    START
-============================== */
+========================= */
 
 update();
 
