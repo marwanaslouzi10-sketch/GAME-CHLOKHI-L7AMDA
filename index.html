@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dog Jump</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+    background: linear-gradient(#73c8ff, #dff5ff);
+    font-family: Arial, sans-serif;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+#game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+#score {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #111;
+    z-index: 10;
+}
+
+#dog {
+    position: absolute;
+    left: 80px;
+    bottom: 90px;
+    font-size: 65px;
+    z-index: 5;
+}
+
+#ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 90px;
+    background: #3f9b42;
+    border-top: 8px solid #27652a;
+}
+
+.wall {
+    position: absolute;
+    bottom: 90px;
+    right: -80px;
+    width: 60px;
+    height: 85px;
+    background: #8b4513;
+    border: 5px solid #5b2d0a;
+    border-radius: 5px;
+}
+
+#jumpBtn {
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    width: 130px;
+    height: 65px;
+    border: none;
+    border-radius: 35px;
+    background: #e53935;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 20;
+    box-shadow: 0 5px 0 #a71916;
+}
+
+#jumpBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #a71916;
+}
+
+#gameOver {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 30;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+}
+
+#gameOver h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+#restart {
+    padding: 15px 35px;
+    border: none;
+    border-radius: 25px;
+    background: #2196f3;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div id="score">Score: 0</div>
+
+    <div id="dog">🐕</div>
+
+    <div id="ground"></div>
+
+    <button id="jumpBtn">JUMP 🦘</button>
+
+    <div id="gameOver">
+        <h1>GAME OVER 💥</h1>
+        <p id="finalScore">Score: 0</p>
+        <br>
+        <button id="restart">RESTART 🔄</button>
+    </div>
+
+</div>
+
+<script>
+const dog = document.getElementById("dog");
+const game = document.getElementById("game");
+const scoreText = document.getElementById("score");
+const jumpBtn = document.getElementById("jumpBtn");
+const gameOverScreen = document.getElementById("gameOver");
+const restartBtn = document.getElementById("restart");
+const finalScore = document.getElementById("finalScore");
+
+let dogY = 0;
+let velocity = 0;
+let gravity = 0.8;
+let jumping = false;
+let gameRunning = true;
+let score = 0;
+let speed = 6;
+let walls = [];
+let lastWall = 0;
+
+function jump() {
+    if (!gameRunning) return;
+
+    if (!jumping) {
+        velocity = 15;
+        jumping = true;
+    }
+}
+
+jumpBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    jump();
+});
+
+jumpBtn.addEventListener("click", jump);
+
+document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" || e.code === "ArrowUp") {
+        jump();
+    }
+});
+
+function createWall() {
+    const wall = document.createElement("div");
+    wall.className = "wall";
+
+    wall.style.right = "-80px";
+
+    game.appendChild(wall);
+    walls.push(wall);
+}
+
+function collision(a, b) {
+    const r1 = a.getBoundingClientRect();
+    const r2 = b.getBoundingClientRect();
+
+    return !(
+        r1.right < r2.left ||
+        r1.left > r2.right ||
+        r1.bottom < r2.top ||
+        r1.top > r2.bottom
+    );
+}
+
+function gameOver() {
+    gameRunning = false;
+
+    finalScore.textContent = "Score: " + Math.floor(score);
+    gameOverScreen.style.display = "flex";
+}
+
+function update() {
+    if (!gameRunning) return;
+
+    // Dog physics
+    if (jumping) {
+        dogY += velocity;
+        velocity -= gravity;
+
+        if (dogY <= 0) {
+            dogY = 0;
+            velocity = 0;
+            jumping = false;
+        }
+    }
+
+    dog.style.bottom = (90 + dogY) + "px";
+
+    // Create walls
+    lastWall++;
+
+    if (lastWall > 100) {
+        createWall();
+        lastWall = 0;
+    }
+
+    // Move walls
+    for (let i = walls.length - 1; i >= 0; i--) {
+        let wall = walls[i];
+
+        let currentRight = parseFloat(
+            getComputedStyle(wall).right
+        );
+
+        currentRight += speed;
+        wall.style.right = currentRight + "px";
+
+        // Collision
+        if (collision(dog, wall)) {
+            gameOver();
+        }
+
+        // Remove wall
+        if (currentRight > window.innerWidth + 100) {
+            wall.remove();
+            walls.splice(i, 1);
+        }
+    }
+
+    // Score
+    score += 0.05;
+    scoreText.textContent = "Score: " + Math.floor(score);
+
+    // Slowly increase difficulty
+    speed += 0.0005;
+
+    requestAnimationFrame(update);
+}
+
+restartBtn.addEventListener("click", () => {
+    location.reload();
+});
+
+update();
+</script>
+
+</body>
+  </html>
