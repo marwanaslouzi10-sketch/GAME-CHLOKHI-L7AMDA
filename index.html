@@ -3,114 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dog Jump</title>
+<title>Dog Jump Game</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    overflow: hidden;
-    background: linear-gradient(#73c8ff, #dff5ff);
-    font-family: Arial, sans-serif;
-    user-select: none;
-    touch-action: manipulation;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#8ed8ff;
+    touch-action:none;
 }
 
-#game {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
+#game{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:linear-gradient(
+        #70c9ff 0%,
+        #c8efff 70%,
+        #e9f9ff 100%
+    );
 }
 
-#score {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 25px;
-    font-weight: bold;
-    color: #111;
-    z-index: 10;
+/* الشمس */
+#sun{
+    position:absolute;
+    width:75px;
+    height:75px;
+    background:#ffd83d;
+    border-radius:50%;
+    top:35px;
+    right:40px;
 }
 
-#dog {
-    position: absolute;
-    left: 80px;
-    bottom: 90px;
-    font-size: 65px;
-    z-index: 5;
+/* Score */
+#score{
+    position:absolute;
+    top:20px;
+    left:20px;
+    z-index:50;
+    font-size:25px;
+    font-weight:bold;
+    color:#111;
 }
 
-#ground {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 90px;
-    background: #3f9b42;
-    border-top: 8px solid #27652a;
+/* الأرض */
+#ground{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:95px;
+    background:#4caf50;
+    border-top:7px solid #28752d;
 }
 
-.wall {
-    position: absolute;
-    bottom: 90px;
-    right: -80px;
-    width: 60px;
-    height: 85px;
-    background: #8b4513;
-    border: 5px solid #5b2d0a;
-    border-radius: 5px;
+/* الكلب */
+#dog{
+    position:absolute;
+    left:75px;
+    bottom:95px;
+    width:70px;
+    height:70px;
+    font-size:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:20;
 }
 
-#jumpBtn {
-    position: absolute;
-    right: 25px;
-    bottom: 25px;
-    width: 130px;
-    height: 65px;
-    border: none;
-    border-radius: 35px;
-    background: #e53935;
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
-    z-index: 20;
-    box-shadow: 0 5px 0 #a71916;
+/* السور */
+.wall{
+    position:absolute;
+    right:-80px;
+    bottom:95px;
+    width:58px;
+    height:78px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #7b3f18 0px,
+            #7b3f18 12px,
+            #9a5423 12px,
+            #9a5423 24px
+        );
+    border:5px solid #54270c;
+    border-radius:4px;
+    z-index:10;
 }
 
-#jumpBtn:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 #a71916;
+/* زر القفز */
+#jump{
+    position:absolute;
+    right:25px;
+    bottom:120px;
+    width:145px;
+    height:68px;
+    border:none;
+    border-radius:35px;
+    background:#e53935;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    z-index:100;
+    box-shadow:0 6px 0 #a51d1a;
 }
 
-#gameOver {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 30;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: white;
+#jump:active{
+    transform:translateY(5px);
+    box-shadow:0 1px 0 #a51d1a;
 }
 
-#gameOver h1 {
-    font-size: 45px;
-    margin-bottom: 15px;
+/* Game Over */
+#over{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:rgba(0,0,0,.72);
+    color:white;
+    z-index:200;
 }
 
-#restart {
-    padding: 15px 35px;
-    border: none;
-    border-radius: 25px;
-    background: #2196f3;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
+#over h1{
+    font-size:44px;
+    margin-bottom:10px;
+}
+
+#over p{
+    font-size:23px;
+}
+
+#restart{
+    margin-top:22px;
+    padding:14px 35px;
+    border:0;
+    border-radius:30px;
+    background:#2196f3;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -119,157 +161,416 @@ body {
 
 <div id="game">
 
-    <div id="score">Score: 0</div>
+    <div id="sun"></div>
 
-    <div id="dog">🐕</div>
+    <div id="score">
+        Score: 0
+    </div>
+
+    <div id="dog">
+        🐕
+    </div>
 
     <div id="ground"></div>
 
-    <button id="jumpBtn">JUMP 🦘</button>
+    <button id="jump">
+        JUMP 🦘
+    </button>
 
-    <div id="gameOver">
+    <div id="over">
         <h1>GAME OVER 💥</h1>
-        <p id="finalScore">Score: 0</p>
-        <br>
-        <button id="restart">RESTART 🔄</button>
+        <p id="final">Score: 0</p>
+        <button id="restart">
+            RESTART 🔄
+        </button>
     </div>
 
 </div>
 
 <script>
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
 const dog = document.getElementById("dog");
 const game = document.getElementById("game");
-const scoreText = document.getElementById("score");
-const jumpBtn = document.getElementById("jumpBtn");
-const gameOverScreen = document.getElementById("gameOver");
-const restartBtn = document.getElementById("restart");
-const finalScore = document.getElementById("finalScore");
+const jumpButton = document.getElementById("jump");
+const scoreElement = document.getElementById("score");
+const gameOver = document.getElementById("over");
+const finalScore = document.getElementById("final");
+const restart = document.getElementById("restart");
 
-let dogY = 0;
+
+let playing = true;
+
+let dogHeight = 0;
+
 let velocity = 0;
-let gravity = 0.8;
+
 let jumping = false;
-let gameRunning = true;
+
+
+/*
+   قفزة أقصر وواقعية
+*/
+const jumpPower = 11;
+const gravity = 0.72;
+
+
+/* السرعة */
+let speed = 5;
+
+
+/* النقاط */
 let score = 0;
-let speed = 6;
+
+
+/* الأسوار */
 let walls = [];
-let lastWall = 0;
 
-function jump() {
-    if (!gameRunning) return;
 
-    if (!jumping) {
-        velocity = 15;
-        jumping = true;
-    }
+/* وقت ظهور السور */
+let spawnTime = 0;
+
+
+/* =========================
+   JUMP
+========================= */
+
+function jump(){
+
+    if(!playing) return;
+
+    /*
+       ما نسمحوش بالقفز
+       وسط قفزة أخرى
+    */
+
+    if(jumping) return;
+
+    jumping = true;
+
+    velocity = jumpPower;
 }
 
-jumpBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    jump();
-});
 
-jumpBtn.addEventListener("click", jump);
+/* زر الهاتف */
 
-document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" || e.code === "ArrowUp") {
+jumpButton.addEventListener(
+    "touchstart",
+    function(e){
+
+        e.preventDefault();
+
         jump();
-    }
-});
 
-function createWall() {
-    const wall = document.createElement("div");
+    },
+    {passive:false}
+);
+
+
+/* الضغط العادي */
+
+jumpButton.addEventListener(
+    "click",
+    function(){
+
+        jump();
+
+    }
+);
+
+
+/* Keyboard */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(
+            e.code === "Space" ||
+            e.code === "ArrowUp"
+        ){
+
+            e.preventDefault();
+
+            jump();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   CREATE WALL
+========================= */
+
+function createWall(){
+
+    const wall =
+        document.createElement("div");
+
     wall.className = "wall";
 
     wall.style.right = "-80px";
 
     game.appendChild(wall);
-    walls.push(wall);
+
+    walls.push({
+        element:wall,
+        passed:false
+    });
 }
 
-function collision(a, b) {
-    const r1 = a.getBoundingClientRect();
-    const r2 = b.getBoundingClientRect();
 
-    return !(
-        r1.right < r2.left ||
-        r1.left > r2.right ||
-        r1.bottom < r2.top ||
-        r1.top > r2.bottom
-    );
+/* =========================
+   COLLISION
+========================= */
+
+function isColliding(){
+
+    const dogBox =
+        dog.getBoundingClientRect();
+
+
+    /*
+       كنصغرو منطقة الاصطدام
+       شوية باش اللعبة تكون عادلة
+    */
+
+    const dogLeft =
+        dogBox.left + 12;
+
+    const dogRight =
+        dogBox.right - 12;
+
+    const dogTop =
+        dogBox.top + 12;
+
+    const dogBottom =
+        dogBox.bottom - 5;
+
+
+    for(const wall of walls){
+
+        const box =
+            wall.element.getBoundingClientRect();
+
+
+        /*
+           غير ملي السور يكون قريب
+        */
+
+        const horizontal =
+            dogRight > box.left &&
+            dogLeft < box.right;
+
+
+        const vertical =
+            dogBottom > box.top &&
+            dogTop < box.bottom;
+
+
+        if(horizontal && vertical){
+
+            return true;
+
+        }
+
+    }
+
+    return false;
 }
 
-function gameOver() {
-    gameRunning = false;
 
-    finalScore.textContent = "Score: " + Math.floor(score);
-    gameOverScreen.style.display = "flex";
+/* =========================
+   GAME OVER
+========================= */
+
+function endGame(){
+
+    playing = false;
+
+    finalScore.textContent =
+        "Score: " + Math.floor(score);
+
+    gameOver.style.display =
+        "flex";
 }
 
-function update() {
-    if (!gameRunning) return;
 
-    // Dog physics
-    if (jumping) {
-        dogY += velocity;
+/* =========================
+   MAIN GAME LOOP
+========================= */
+
+function gameLoop(){
+
+    if(!playing) return;
+
+
+    /* =================
+       DOG PHYSICS
+    ================= */
+
+    if(jumping){
+
+        dogHeight += velocity;
+
         velocity -= gravity;
 
-        if (dogY <= 0) {
-            dogY = 0;
+
+        /*
+           رجوع للأرض
+        */
+
+        if(dogHeight <= 0){
+
+            dogHeight = 0;
+
             velocity = 0;
+
             jumping = false;
         }
     }
 
-    dog.style.bottom = (90 + dogY) + "px";
 
-    // Create walls
-    lastWall++;
+    dog.style.bottom =
+        (95 + dogHeight) + "px";
 
-    if (lastWall > 100) {
+
+    /* =================
+       CREATE WALLS
+    ================= */
+
+    spawnTime++;
+
+
+    /*
+       المسافة بين الأسوار
+       ماشي قريبة بزاف
+    */
+
+    if(spawnTime >= 135){
+
         createWall();
-        lastWall = 0;
+
+        spawnTime = 0;
     }
 
-    // Move walls
-    for (let i = walls.length - 1; i >= 0; i--) {
-        let wall = walls[i];
 
-        let currentRight = parseFloat(
-            getComputedStyle(wall).right
-        );
+    /* =================
+       MOVE WALLS
+    ================= */
 
-        currentRight += speed;
-        wall.style.right = currentRight + "px";
+    for(
+        let i = walls.length - 1;
+        i >= 0;
+        i--
+    ){
 
-        // Collision
-        if (collision(dog, wall)) {
-            gameOver();
+        const wall = walls[i];
+
+        const element =
+            wall.element;
+
+
+        let right =
+            parseFloat(
+                getComputedStyle(element).right
+            );
+
+
+        right += speed;
+
+        element.style.right =
+            right + "px";
+
+
+        /* Collision */
+
+        if(isColliding()){
+
+            endGame();
+
+            return;
         }
 
-        // Remove wall
-        if (currentRight > window.innerWidth + 100) {
-            wall.remove();
-            walls.splice(i, 1);
+
+        /* Score */
+
+        const wallBox =
+            element.getBoundingClientRect();
+
+        const dogBox =
+            dog.getBoundingClientRect();
+
+
+        if(
+            !wall.passed &&
+            wallBox.right < dogBox.left
+        ){
+
+            wall.passed = true;
+
+            score += 10;
+        }
+
+
+        /* حذف السور القديم */
+
+        if(
+            right >
+            window.innerWidth + 100
+        ){
+
+            element.remove();
+
+            walls.splice(i,1);
         }
     }
 
-    // Score
-    score += 0.05;
-    scoreText.textContent = "Score: " + Math.floor(score);
 
-    // Slowly increase difficulty
-    speed += 0.0005;
+    /* نقاط الوقت */
 
-    requestAnimationFrame(update);
+    score += 0.02;
+
+    scoreElement.textContent =
+        "Score: " +
+        Math.floor(score);
+
+
+    /* زيادة الصعوبة تدريجيا */
+
+    speed += 0.00025;
+
+
+    requestAnimationFrame(gameLoop);
 }
 
-restartBtn.addEventListener("click", () => {
-    location.reload();
-});
 
-update();
+/* =========================
+   RESTART
+========================= */
+
+restart.addEventListener(
+    "click",
+    function(){
+
+        location.reload();
+
+    }
+);
+
+
+/* =========================
+   START GAME
+========================= */
+
+gameLoop();
+
 </script>
 
 </body>
-  </html>
+    </html>
