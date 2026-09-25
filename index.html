@@ -14,9 +14,16 @@
     -webkit-user-select:none;
 }
 
-body{
+html,body{
+    width:100%;
+    height:100%;
     overflow:hidden;
     font-family:Arial,sans-serif;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
 }
 
 #game{
@@ -26,66 +33,60 @@ body{
     overflow:hidden;
 }
 
-/* ===== MAPS ===== */
+/* ================= MAPS ================= */
 
-#game.stage1{
+.stage1{
     background:linear-gradient(
-        to bottom,
-        #58c5ff 0%,
-        #c4efff 58%,
-        #70c653 58%,
-        #36952f 100%
+        #55c6ff 0%,
+        #c9f0ff 58%,
+        #71c653 58%,
+        #369532 100%
     );
 }
 
-#game.stage2{
+.stage2{
     background:linear-gradient(
-        to bottom,
-        #899196 0%,
-        #c5c9cb 55%,
+        #899398 0%,
+        #c9cdcf 55%,
         #606568 55%,
         #303336 100%
     );
 }
 
-#game.stage3{
+.stage3{
     background:linear-gradient(
-        to bottom,
-        #20aef5 0%,
-        #8edfff 65%,
-        #e2f8ff 100%
+        #20adf5 0%,
+        #8cdeff 65%,
+        #e5f8ff 100%
     );
 }
 
-#game.stage4{
+.stage4{
     background:linear-gradient(
-        to bottom,
-        #ffac50 0%,
-        #e45a31 50%,
-        #6e211b 75%,
+        #ffae50 0%,
+        #e65d32 50%,
+        #70241d 75%,
         #250909 100%
     );
 }
 
-#game.stage5{
+.stage5{
     background:linear-gradient(
-        to bottom,
-        #12182b 0%,
-        #202b48 55%,
-        #080b12 100%
+        #11172b 0%,
+        #202945 55%,
+        #080a11 100%
     );
 }
 
-#game.stage6{
+.stage6{
     background:linear-gradient(
-        to bottom,
-        #080a18 0%,
-        #171b35 55%,
-        #04050a 100%
+        #070918 0%,
+        #181c38 55%,
+        #030409 100%
     );
 }
 
-/* ===== GROUND ===== */
+/* ================= GROUND ================= */
 
 #ground{
     position:absolute;
@@ -93,50 +94,52 @@ body{
     bottom:0;
     width:100%;
     height:18%;
-    background:#389b32;
+    background:#399c32;
     z-index:5;
 }
 
-#game.stage2 #ground{
+.stage2 #ground{
     background:#34383b;
 }
 
-#game.stage3 #ground{
+.stage3 #ground{
     background:rgba(255,255,255,.3);
 }
 
-#game.stage4 #ground{
+.stage4 #ground{
     background:#301010;
 }
 
-#game.stage5 #ground,
-#game.stage6 #ground{
+.stage5 #ground,
+.stage6 #ground{
     background:#08090e;
 }
 
-/* ===== UI ===== */
+/* ================= SCORE ================= */
 
 #score{
     position:absolute;
-    top:15px;
+    top:14px;
     left:15px;
     z-index:100;
     color:white;
     font-size:24px;
     font-weight:bold;
-    text-shadow:2px 2px 4px black;
+    text-shadow:2px 2px 4px #000;
 }
 
 #stageText{
     position:absolute;
-    top:48px;
+    top:47px;
     left:15px;
     z-index:100;
     color:white;
     font-size:19px;
     font-weight:bold;
-    text-shadow:2px 2px 4px black;
+    text-shadow:2px 2px 4px #000;
 }
+
+/* ================= MESSAGE ================= */
 
 #message{
     position:absolute;
@@ -145,44 +148,62 @@ body{
     transform:translate(-50%,-50%);
     z-index:200;
     color:white;
-    font-size:44px;
+    font-size:43px;
     font-weight:bold;
     text-align:center;
-    text-shadow:3px 3px 7px black;
+    text-shadow:3px 3px 7px #000;
+    pointer-events:none;
 }
+
+/* ================= PLAY ================= */
 
 #playButton{
     position:absolute;
     top:58%;
     left:50%;
     transform:translate(-50%,-50%);
-    z-index:201;
-    padding:20px 60px;
+    z-index:250;
+
+    width:210px;
+    height:75px;
+
     border:none;
-    border-radius:15px;
+    border-radius:16px;
+
     background:#22c55e;
     color:white;
+
     font-size:30px;
     font-weight:bold;
-    box-shadow:0 5px 0 #15803d;
+
+    box-shadow:0 6px 0 #15803d;
+
+    cursor:pointer;
+    touch-action:manipulation;
 }
 
 #playButton:active{
     transform:translate(-50%,-46%);
+    box-shadow:0 2px 0 #15803d;
 }
 
-/* ===== PLAYER ===== */
+/* ================= PLAYER ================= */
 
 #player{
     position:absolute;
+
     left:11%;
     bottom:18%;
+
     width:70px;
     height:70px;
+
     z-index:20;
+
     font-size:52px;
     line-height:70px;
     text-align:center;
+
     transform:translateY(0);
 }
 
@@ -192,108 +213,140 @@ body{
         scaleY(.60);
 }
 
-/* ===== BUTTONS ===== */
+/* ================= CONTROLS ================= */
 
 .control{
     position:absolute;
+    right:25px;
     bottom:25px;
-    z-index:150;
+
     width:125px;
     height:65px;
+
+    z-index:150;
+
     border:none;
     border-radius:15px;
+
     color:white;
     font-size:22px;
     font-weight:bold;
+
     box-shadow:0 5px 0 rgba(0,0,0,.35);
+
     touch-action:none;
+}
+
+#jumpButton{
+    background:#2563eb;
+}
+
+#shootButton{
+    background:#dc2626;
+    display:none;
+}
+
+#duckButton{
+    background:#9333ea;
+    display:none;
 }
 
 .control:active{
     transform:translateY(4px);
 }
 
-#jumpButton{
-    right:25px;
-    background:#2563eb;
-}
-
-#shootButton{
-    right:25px;
-    background:#dc2626;
-    display:none;
-}
-
-#duckButton{
-    right:25px;
-    background:#9333ea;
-    display:none;
-}
-
-/* ===== WOOD ===== */
+/* ================= OBSTACLE ================= */
 
 .obstacle{
     position:absolute;
+
     width:42px;
     height:65px;
+
     bottom:18%;
+
     background:#8b4513;
+
     border:4px solid #5b2c0c;
+
     border-radius:4px;
+
     z-index:10;
 }
 
 .obstacle::before{
     content:"";
+
     position:absolute;
+
     left:4px;
     top:12px;
+
     width:26px;
     height:5px;
+
     background:#c27a3c;
+
     transform:rotate(-10deg);
 }
 
 .obstacle::after{
     content:"";
+
     position:absolute;
+
     left:5px;
     top:35px;
+
     width:25px;
     height:5px;
+
     background:#c27a3c;
+
     transform:rotate(8deg);
 }
 
 .hpText{
     position:absolute;
+
     top:-25px;
     left:50%;
+
     transform:translateX(-50%);
+
     color:white;
+
     font-size:18px;
     font-weight:bold;
-    text-shadow:2px 2px 3px black;
+
+    text-shadow:2px 2px 3px #000;
 }
 
-/* ===== BULLET ===== */
+/* ================= BULLET ================= */
 
 .bullet{
     position:absolute;
+
     width:16px;
     height:6px;
+
     background:#ffd000;
+
     border-radius:5px;
+
     z-index:30;
 }
 
-/* ===== BIRD ===== */
+/* ================= BIRD ================= */
 
 .bird{
     position:absolute;
+
     width:55px;
     height:45px;
+
     font-size:42px;
+
     z-index:15;
 }
 
@@ -314,7 +367,7 @@ body{
         DOG RUNNER
     </div>
 
-    <button id="playButton">
+    <button id="playButton" type="button">
         PLAY
     </button>
 
@@ -322,15 +375,15 @@ body{
 
     <div id="ground"></div>
 
-    <button id="jumpButton" class="control">
+    <button id="jumpButton" class="control" type="button">
         JUMP
     </button>
 
-    <button id="shootButton" class="control">
+    <button id="shootButton" class="control" type="button">
         SHOOT
     </button>
 
-    <button id="duckButton" class="control">
+    <button id="duckButton" class="control" type="button">
         DUCK
     </button>
 
@@ -342,18 +395,32 @@ body{
    ELEMENTS
 ===================================================== */
 
-const game = document.getElementById("game");
-const player = document.getElementById("player");
+const game =
+    document.getElementById("game");
 
-const scoreText = document.getElementById("score");
-const stageText = document.getElementById("stageText");
+const player =
+    document.getElementById("player");
 
-const message = document.getElementById("message");
-const playButton = document.getElementById("playButton");
+const scoreText =
+    document.getElementById("score");
 
-const jumpButton = document.getElementById("jumpButton");
-const shootButton = document.getElementById("shootButton");
-const duckButton = document.getElementById("duckButton");
+const stageText =
+    document.getElementById("stageText");
+
+const message =
+    document.getElementById("message");
+
+const playButton =
+    document.getElementById("playButton");
+
+const jumpButton =
+    document.getElementById("jumpButton");
+
+const shootButton =
+    document.getElementById("shootButton");
+
+const duckButton =
+    document.getElementById("duckButton");
 
 
 /* =====================================================
@@ -386,12 +453,57 @@ let lastTime = 0;
 
 
 /* =====================================================
-   PLAY
+   PLAY / RESTART
+   ONE BUTTON SYSTEM
+===================================================== */
+
+function playButtonAction(e){
+
+    if(e){
+        e.preventDefault();
+    }
+
+    if(gameOver){
+
+        restartGame();
+
+    }else if(!gameStarted){
+
+        startGame();
+    }
+}
+
+
+/*
+   pointerdown works on:
+   - Android
+   - iPhone
+   - PC
+*/
+
+playButton.addEventListener(
+    "pointerdown",
+    playButtonAction
+);
+
+
+/* Prevent double touch */
+playButton.addEventListener(
+    "click",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+
+/* =====================================================
+   START GAME
 ===================================================== */
 
 function startGame(){
 
-    if(gameStarted) return;
+    if(gameStarted)
+        return;
 
     gameStarted = true;
     gameOver = false;
@@ -410,25 +522,32 @@ function startGame(){
 
     clearObjects();
 
-    message.style.display = "none";
-    playButton.style.display = "none";
-
-    player.textContent = "🐕";
     player.classList.remove("duck");
+
+    player.style.transform =
+        "translateY(0)";
+
+    player.textContent =
+        "🐕";
+
+    message.style.display =
+        "none";
+
+    playButton.style.display =
+        "none";
+
+    scoreText.textContent =
+        "SCORE: 0";
 
     updateStage();
 
-    lastTime = performance.now();
+    lastTime =
+        performance.now();
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(
+        gameLoop
+    );
 }
-
-playButton.addEventListener("click",startGame);
-
-playButton.addEventListener("touchstart",(e)=>{
-    e.preventDefault();
-    startGame();
-},{passive:false});
 
 
 /* =====================================================
@@ -437,119 +556,143 @@ playButton.addEventListener("touchstart",(e)=>{
 
 function jump(){
 
-    if(!gameStarted || gameOver) return;
+    if(
+        !gameStarted ||
+        gameOver
+    )
+        return;
 
-    if(stage === 3) return;
+    if(stage === 3)
+        return;
 
-    if(jumping) return;
+    if(jumping)
+        return;
 
     jumping = true;
-    velocityY = jumpPower;
+
+    velocityY =
+        jumpPower;
 }
 
-jumpButton.addEventListener("click",jump);
 
-jumpButton.addEventListener("touchstart",(e)=>{
-    e.preventDefault();
-    jump();
-},{passive:false});
+jumpButton.addEventListener(
+    "pointerdown",
+    function(e){
+
+        e.preventDefault();
+
+        jump();
+    }
+);
 
 
 /* =====================================================
    KEYBOARD
 ===================================================== */
 
-document.addEventListener("keydown",(e)=>{
+document.addEventListener(
+    "keydown",
+    function(e){
 
-    if(
-        e.code === "Space" ||
-        e.code === "ArrowUp"
-    ){
-        e.preventDefault();
-        jump();
+        if(
+            e.code === "Space" ||
+            e.code === "ArrowUp"
+        ){
+
+            e.preventDefault();
+
+            jump();
+        }
+
+
+        if(
+            e.code === "ArrowDown" &&
+            stage === 3
+        ){
+
+            startDuck(e);
+        }
+
+
+        if(e.code === "KeyX"){
+
+            shoot();
+        }
     }
+);
 
-    if(
-        e.code === "ArrowDown" &&
-        stage === 3
-    ){
-        startDuck(e);
+
+document.addEventListener(
+    "keyup",
+    function(e){
+
+        if(e.code === "ArrowDown"){
+
+            stopDuck(e);
+        }
     }
-
-    if(e.code === "KeyX"){
-        shoot();
-    }
-});
-
-document.addEventListener("keyup",(e)=>{
-
-    if(e.code === "ArrowDown"){
-        stopDuck(e);
-    }
-});
+);
 
 
 /* =====================================================
    DUCK
-   FIXED FOR PHONE
 ===================================================== */
 
 function startDuck(e){
 
-    if(e) e.preventDefault();
+    if(e)
+        e.preventDefault();
 
-    if(stage !== 3 || gameOver) return;
+    if(
+        !gameStarted ||
+        gameOver ||
+        stage !== 3
+    )
+        return;
 
     ducking = true;
 
-    player.classList.add("duck");
+    player.classList.add(
+        "duck"
+    );
 }
+
 
 function stopDuck(e){
 
-    if(e) e.preventDefault();
+    if(e)
+        e.preventDefault();
 
     ducking = false;
 
-    player.classList.remove("duck");
+    player.classList.remove(
+        "duck"
+    );
 }
 
 
-/* Touch */
+/*
+   Pointer events make DUCK
+   reliable on phones.
+*/
 
 duckButton.addEventListener(
-    "touchstart",
-    startDuck,
-    {passive:false}
-);
-
-duckButton.addEventListener(
-    "touchend",
-    stopDuck,
-    {passive:false}
-);
-
-duckButton.addEventListener(
-    "touchcancel",
-    stopDuck,
-    {passive:false}
-);
-
-
-/* Mouse */
-
-duckButton.addEventListener(
-    "mousedown",
+    "pointerdown",
     startDuck
 );
 
 duckButton.addEventListener(
-    "mouseup",
+    "pointerup",
     stopDuck
 );
 
 duckButton.addEventListener(
-    "mouseleave",
+    "pointercancel",
+    stopDuck
+);
+
+duckButton.addEventListener(
+    "pointerleave",
     stopDuck
 );
 
@@ -564,7 +707,8 @@ function shoot(){
         !gameStarted ||
         gameOver ||
         stage !== 2
-    ) return;
+    )
+        return;
 
     const rect =
         player.getBoundingClientRect();
@@ -575,7 +719,8 @@ function shoot(){
     const bullet =
         document.createElement("div");
 
-    bullet.className = "bullet";
+    bullet.className =
+        "bullet";
 
     bullet.x =
         rect.right -
@@ -592,17 +737,25 @@ function shoot(){
     bullet.style.top =
         bullet.y + "px";
 
-    game.appendChild(bullet);
+    game.appendChild(
+        bullet
+    );
 
-    bullets.push(bullet);
+    bullets.push(
+        bullet
+    );
 }
 
-shootButton.addEventListener("click",shoot);
 
-shootButton.addEventListener("touchstart",(e)=>{
-    e.preventDefault();
-    shoot();
-},{passive:false});
+shootButton.addEventListener(
+    "pointerdown",
+    function(e){
+
+        e.preventDefault();
+
+        shoot();
+    }
+);
 
 
 /* =====================================================
@@ -614,7 +767,8 @@ function createObstacle(){
     const obstacle =
         document.createElement("div");
 
-    obstacle.className = "obstacle";
+    obstacle.className =
+        "obstacle";
 
     obstacle.x =
         window.innerWidth + 30;
@@ -624,22 +778,34 @@ function createObstacle(){
     obstacle.style.left =
         obstacle.x + "px";
 
+
     if(stage === 2){
 
         const hp =
             document.createElement("div");
 
-        hp.className = "hpText";
-        hp.textContent = "3";
+        hp.className =
+            "hpText";
 
-        obstacle.appendChild(hp);
+        hp.textContent =
+            "3";
 
-        obstacle.hpText = hp;
+        obstacle.appendChild(
+            hp
+        );
+
+        obstacle.hpText =
+            hp;
     }
 
-    game.appendChild(obstacle);
 
-    obstacles.push(obstacle);
+    game.appendChild(
+        obstacle
+    );
+
+    obstacles.push(
+        obstacle
+    );
 }
 
 
@@ -652,23 +818,26 @@ function createBird(){
     const bird =
         document.createElement("div");
 
-    bird.className = "bird";
+    bird.className =
+        "bird";
 
-    bird.textContent = "🦅";
+    bird.textContent =
+        "🦅";
 
     bird.x =
         window.innerWidth + 60;
 
     /*
-       BIRD RAISED HIGHER
-       So it flies clearly above the dog.
+       Raised higher than before.
     */
 
     bird.y =
-        game.clientHeight * 0.82 - 105;
+        game.clientHeight *
+        0.82 - 105;
 
     bird.y +=
-        Math.random() * 15 - 7;
+        Math.random() *
+        15 - 7;
 
     bird.style.left =
         bird.x + "px";
@@ -676,21 +845,33 @@ function createBird(){
     bird.style.top =
         bird.y + "px";
 
-    game.appendChild(bird);
+    game.appendChild(
+        bird
+    );
 
-    birds.push(bird);
+    birds.push(
+        bird
+    );
 }
 
 
 /* =====================================================
-   CLEAR OBJECTS
+   CLEAR
 ===================================================== */
 
 function clearObjects(){
 
-    obstacles.forEach(o=>o.remove());
-    bullets.forEach(b=>b.remove());
-    birds.forEach(b=>b.remove());
+    obstacles.forEach(
+        o => o.remove()
+    );
+
+    bullets.forEach(
+        b => b.remove()
+    );
+
+    birds.forEach(
+        b => b.remove()
+    );
 
     obstacles = [];
     bullets = [];
@@ -707,49 +888,61 @@ function updateStage(){
     updateMap();
     updateControls();
 
+
     if(stage === 1){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 1 - DAY";
     }
 
+
     else if(stage === 2){
 
-        player.textContent = "🪖🐕";
+        player.textContent =
+            "🪖🐕";
 
         stageText.textContent =
             "STAGE 2 - MILITARY DAY";
     }
 
+
     else if(stage === 3){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 3 - SKY DAY";
     }
 
+
     else if(stage === 4){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 4 - VOLCANO";
     }
 
+
     else if(stage === 5){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 5 - NIGHT";
     }
 
+
     else{
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE " +
@@ -767,29 +960,23 @@ function updateMap(){
 
     game.className = "";
 
-    if(stage === 1){
+    if(stage === 1)
         game.classList.add("stage1");
-    }
 
-    else if(stage === 2){
+    else if(stage === 2)
         game.classList.add("stage2");
-    }
 
-    else if(stage === 3){
+    else if(stage === 3)
         game.classList.add("stage3");
-    }
 
-    else if(stage === 4){
+    else if(stage === 4)
         game.classList.add("stage4");
-    }
 
-    else if(stage === 5){
+    else if(stage === 5)
         game.classList.add("stage5");
-    }
 
-    else{
+    else
         game.classList.add("stage6");
-    }
 }
 
 
@@ -800,15 +987,19 @@ function updateMap(){
 function updateControls(){
 
     jumpButton.style.display =
-        stage === 1 ||
-        stage >= 4
+        (
+            stage === 1 ||
+            stage >= 4
+        )
         ? "block"
         : "none";
+
 
     shootButton.style.display =
         stage === 2
         ? "block"
         : "none";
+
 
     duckButton.style.display =
         stage === 3
@@ -830,10 +1021,7 @@ function getPlayerBox(){
         player.getBoundingClientRect();
 
 
-    /*
-       STAGE 3:
-       Only the head is dangerous.
-    */
+    /* Stage 3 = HEAD */
 
     if(stage === 3){
 
@@ -859,6 +1047,7 @@ function getPlayerBox(){
             };
         }
 
+
         return {
 
             left:
@@ -880,10 +1069,7 @@ function getPlayerBox(){
     }
 
 
-    /*
-       Normal stages:
-       only feet collide.
-    */
+    /* Other stages = FEET */
 
     return {
 
@@ -922,7 +1108,7 @@ function collision(a,b){
 
 
 /* =====================================================
-   OBSTACLE HITBOX
+   OBSTACLE BOX
 ===================================================== */
 
 function getObstacleBox(o){
@@ -955,15 +1141,10 @@ function getObstacleBox(o){
 
 
 /* =====================================================
-   BIRD HITBOX
+   BIRD BOX
 ===================================================== */
 
 function getBirdBox(b){
-
-    /*
-       Small hitbox to avoid
-       false collisions.
-    */
 
     return {
 
@@ -989,14 +1170,13 @@ function getBirdBox(b){
 function getGameSpeed(){
 
     /*
-       Stage 1 = 5
-       Stage 2 = 5.35
-       Stage 3 = 5.70
-       Stage 4 = 6.05
-       Stage 5 = 6.40
+       1 = 5
+       2 = 5.35
+       3 = 5.70
+       4 = 6.05
+       5 = 6.40
 
-       Stage 6+
-       +0.5 every stage.
+       6+ = +0.5 every stage
     */
 
     if(stage <= 5){
@@ -1016,16 +1196,24 @@ function getGameSpeed(){
 
 function gameLoop(time){
 
-    if(!gameStarted || gameOver)
+    if(
+        !gameStarted ||
+        gameOver
+    )
         return;
+
 
     const delta =
         Math.min(
-            (time-lastTime)/16.67,
+            (time-lastTime) /
+            16.67,
             2
         );
 
-    lastTime = time;
+
+    lastTime =
+        time;
+
 
     updatePlayer(delta);
 
@@ -1039,7 +1227,10 @@ function gameLoop(time){
 
     updateBirds(delta);
 
-    requestAnimationFrame(gameLoop);
+
+    requestAnimationFrame(
+        gameLoop
+    );
 }
 
 
@@ -1065,29 +1256,31 @@ function updatePlayer(delta){
             playerY +=
                 velocityY * delta;
 
+
             if(playerY <= 0){
 
                 playerY = 0;
+
                 velocityY = 0;
+
                 jumping = false;
             }
         }
     }
 
-    /*
-       Apply vertical jump.
-       DUCK is applied separately by CSS.
-    */
 
-    if(!ducking){
-
-        player.style.transform =
-            `translateY(${-playerY}px)`;
-
-    }else if(stage === 3){
+    if(
+        ducking &&
+        stage === 3
+    ){
 
         player.style.transform =
             "translateY(24px) scaleY(.60)";
+
+    }else{
+
+        player.style.transform =
+            `translateY(${-playerY}px)`;
     }
 }
 
@@ -1116,90 +1309,16 @@ function updateStageIfNeeded(){
     const newStage =
         Math.floor(score / 50) + 1;
 
+
     if(newStage !== stage){
 
-        stage = newStage;
+        stage =
+            newStage;
+
 
         /*
-           Clean previous stage.
+           Delete everything from
+           previous stage.
         */
 
-        clearObjects();
-
-        obstacleTimer = 0;
-        birdTimer = 0;
-
-        playerY = 0;
-        velocityY = 0;
-
-        jumping = false;
-        ducking = false;
-
-        player.classList.remove("duck");
-
-        player.style.transform =
-            "translateY(0)";
-
-        updateStage();
-
-        showStageMessage();
-    }
-}
-
-
-/* =====================================================
-   STAGE MESSAGE
-===================================================== */
-
-function showStageMessage(){
-
-    message.style.display = "block";
-
-    message.textContent =
-        "STAGE " + stage;
-
-    setTimeout(()=>{
-
-        if(!gameOver){
-
-            message.style.display =
-                "none";
-        }
-
-    },1200);
-}
-
-
-/* =====================================================
-   OBSTACLES
-===================================================== */
-
-function updateObstacles(delta){
-
-    if(stage === 3)
-        return;
-
-    obstacleTimer += delta;
-
-    let spawnTime;
-
-    if(stage <= 5){
-
-        spawnTime =
-            stage === 1
-            ? 100
-            : 115;
-
-    }else{
-
-        /*
-           Obstacles spawn faster
-           after Stage 5.
-        */
-
-        spawnTime =
-            Math.max(
-                55,
-                115 -
-                (stage - 5) * 3
-   
+        clearObjects()
