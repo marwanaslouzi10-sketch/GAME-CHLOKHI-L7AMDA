@@ -2,1075 +2,541 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Dog Runner V5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dog Runner</title>
 
 <style>
-
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
     user-select:none;
     -webkit-user-select:none;
 }
 
-html,body{
-    width:100%;
-    height:100%;
+body{
     overflow:hidden;
     font-family:Arial,sans-serif;
-    touch-action:none;
 }
-
-
-/* =========================
-   GAME / MAP
-========================= */
 
 #game{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
+}
 
-    background:
-    linear-gradient(
-        #70caff,
-        #dff7ff 70%,
-        #ffffff
+/* ===== MAPS ===== */
+
+#game.stage1{
+    background:linear-gradient(
+        to bottom,
+        #58c5ff 0%,
+        #c4efff 58%,
+        #70c653 58%,
+        #36952f 100%
     );
-
-    transition:background 1s;
 }
 
-
-/* MAP 1 */
-
-.map1{
-    background:
-    linear-gradient(
-        #70caff 0%,
-        #cceeff 65%,
-        #8bd36f 65%,
-        #5cad43 100%
-    ) !important;
+#game.stage2{
+    background:linear-gradient(
+        to bottom,
+        #899196 0%,
+        #c5c9cb 55%,
+        #606568 55%,
+        #303336 100%
+    );
 }
 
-
-/* MAP 2 - MILITARY */
-
-.map2{
-    background:
-    linear-gradient(
-        #68757b 0%,
-        #aeb8bb 60%,
-        #59635f 60%,
-        #3f4642 100%
-    ) !important;
+#game.stage3{
+    background:linear-gradient(
+        to bottom,
+        #20aef5 0%,
+        #8edfff 65%,
+        #e2f8ff 100%
+    );
 }
 
-
-/* MAP 3 - SKY */
-
-.map3{
-    background:
-    linear-gradient(
-        #263b8f 0%,
-        #6c8cff 55%,
-        #b9d7ff 100%
-    ) !important;
+#game.stage4{
+    background:linear-gradient(
+        to bottom,
+        #ffac50 0%,
+        #e45a31 50%,
+        #6e211b 75%,
+        #250909 100%
+    );
 }
 
-
-/* MAP 4 - VOLCANO */
-
-.map4{
-    background:
-    linear-gradient(
-        #351313 0%,
-        #812525 55%,
-        #31110d 55%,
-        #160908 100%
-    ) !important;
+#game.stage5{
+    background:linear-gradient(
+        to bottom,
+        #12182b 0%,
+        #202b48 55%,
+        #080b12 100%
+    );
 }
 
-
-/* MAP 5 */
-
-.map5{
-    background:
-    linear-gradient(
-        #151515 0%,
-        #343434 55%,
-        #151515 55%,
-        #080808 100%
-    ) !important;
+#game.stage6{
+    background:linear-gradient(
+        to bottom,
+        #080a18 0%,
+        #171b35 55%,
+        #04050a 100%
+    );
 }
 
+/* ===== GROUND ===== */
 
-/* =========================
-   START SCREEN
-========================= */
-
-#startScreen{
+#ground{
     position:absolute;
-    inset:0;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:18%;
+    background:#389b32;
+    z-index:5;
+}
 
-    z-index:500;
+#game.stage2 #ground{
+    background:#34383b;
+}
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
+#game.stage3 #ground{
+    background:rgba(255,255,255,.3);
+}
 
-    background:
-    linear-gradient(
-        135deg,
-        #071c35,
-        #143f69
-    );
+#game.stage4 #ground{
+    background:#301010;
+}
 
+#game.stage5 #ground,
+#game.stage6 #ground{
+    background:#08090e;
+}
+
+/* ===== UI ===== */
+
+#score{
+    position:absolute;
+    top:15px;
+    left:15px;
+    z-index:100;
     color:white;
+    font-size:24px;
+    font-weight:bold;
+    text-shadow:2px 2px 4px black;
 }
 
-#startScreen h1{
-    font-size:45px;
-    margin-bottom:10px;
+#stageText{
+    position:absolute;
+    top:48px;
+    left:15px;
+    z-index:100;
+    color:white;
+    font-size:19px;
+    font-weight:bold;
+    text-shadow:2px 2px 4px black;
 }
 
-#startScreen p{
-    margin-bottom:30px;
-    color:#d7e8f5;
+#message{
+    position:absolute;
+    top:43%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:200;
+    color:white;
+    font-size:44px;
+    font-weight:bold;
+    text-align:center;
+    text-shadow:3px 3px 7px black;
 }
 
 #playButton{
-    width:190px;
-    height:70px;
-
+    position:absolute;
+    top:58%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:201;
+    padding:20px 60px;
     border:none;
-    border-radius:40px;
-
-    background:#e53935;
-
+    border-radius:15px;
+    background:#22c55e;
     color:white;
-
-    font-size:28px;
+    font-size:30px;
     font-weight:bold;
-
-    box-shadow:0 7px 0 #9c1715;
+    box-shadow:0 5px 0 #15803d;
 }
 
 #playButton:active{
-    transform:translateY(5px);
-    box-shadow:0 2px 0 #9c1715;
+    transform:translate(-50%,-46%);
 }
 
-
-/* =========================
-   HUD
-========================= */
-
-#hud{
-    position:absolute;
-
-    top:15px;
-    left:15px;
-
-    z-index:100;
-
-    font-size:21px;
-    font-weight:bold;
-
-    color:white;
-
-    text-shadow:
-    1px 1px 3px #000;
-}
-
-
-/* =========================
-   MAP TITLE
-========================= */
-
-#mapName{
-    position:absolute;
-
-    top:15px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    z-index:100;
-
-    padding:8px 18px;
-
-    border-radius:20px;
-
-    background:rgba(0,0,0,.35);
-
-    color:white;
-
-    font-weight:bold;
-}
-
-
-/* =========================
-   SUN / MOON
-========================= */
-
-#sun{
-    position:absolute;
-
-    width:70px;
-    height:70px;
-
-    top:35px;
-    right:35px;
-
-    border-radius:50%;
-
-    background:#ffd83d;
-
-    transition:all 1s;
-}
-
-.map2 #sun{
-    background:#cfd8dc;
-}
-
-.map3 #sun{
-    background:#eee;
-}
-
-.map4 #sun{
-    background:#ff5722;
-    box-shadow:
-    0 0 35px #ff5722;
-}
-
-.map5 #sun{
-    background:#8e8e8e;
-}
-
-
-/* =========================
-   PLAYER
-========================= */
+/* ===== PLAYER ===== */
 
 #player{
     position:absolute;
-
-    left:75px;
-    bottom:95px;
-
-    width:75px;
-    height:75px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    font-size:58px;
-
-    z-index:50;
-
-    transition:transform .1s;
+    left:11%;
+    bottom:18%;
+    width:70px;
+    height:70px;
+    z-index:20;
+    font-size:52px;
+    line-height:70px;
+    text-align:center;
+    transform:translateY(0);
 }
 
 #player.duck{
     transform:
-    translateY(25px)
-    scaleY(.65);
+        translateY(24px)
+        scaleY(.60);
 }
 
+/* ===== BUTTONS ===== */
 
-/* =========================
-   GROUND
-========================= */
-
-#ground{
+.control{
     position:absolute;
-
-    left:0;
-    bottom:0;
-
-    width:100%;
-    height:95px;
-
-    background:#4caf50;
-
-    border-top:7px solid #286e2c;
-
-    z-index:20;
-
-    transition:
-    background .8s,
-    border-color .8s;
-}
-
-
-/* MAP GROUNDS */
-
-.map2 #ground{
-    background:#4c5551;
-    border-color:#272b29;
-}
-
-.map3 #ground{
-    background:#7888bd;
-    border-color:#4d5c91;
-}
-
-.map4 #ground{
-    background:#21100d;
-    border-color:#ff3d00;
-}
-
-.map5 #ground{
-    background:#181818;
-    border-color:#555;
-}
-
-
-/* =========================
-   WALL
-========================= */
-
-.wall{
-    position:absolute;
-
-    right:-80px;
-    bottom:95px;
-
-    width:58px;
-    height:65px;
-
-    background:
-    repeating-linear-gradient(
-        90deg,
-        #754018 0px,
-        #754018 12px,
-        #995321 12px,
-        #995321 24px
-    );
-
-    border:5px solid #54280c;
-
-    border-radius:4px;
-
-    z-index:30;
-}
-
-
-/* Military wall */
-
-.map2 .wall{
-    background:
-    repeating-linear-gradient(
-        90deg,
-        #3f493b 0px,
-        #3f493b 12px,
-        #69765d 12px,
-        #69765d 24px
-    );
-
-    border-color:#252a22;
-}
-
-
-/* Volcano obstacle */
-
-.map4 .wall{
-    background:
-    linear-gradient(
-        135deg,
-        #ff5722,
-        #6d1c0d
-    );
-
-    border-color:#2a0905;
-
-    box-shadow:
-    0 0 12px #ff5722;
-}
-
-
-/* =========================
-   HEALTH BAR
-========================= */
-
-.healthBar{
-    position:absolute;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    top:-17px;
-
-    width:55px;
-    height:8px;
-
-    background:#222;
-
-    border-radius:5px;
-
-    overflow:hidden;
-}
-
-.healthFill{
-    width:100%;
-    height:100%;
-
-    background:#e53935;
-}
-
-
-/* =========================
-   BIRDS
-========================= */
-
-.bird{
-    position:absolute;
-
-    right:-90px;
-
-    font-size:48px;
-
-    z-index:35;
-}
-
-
-/* =========================
-   BULLET
-========================= */
-
-.bullet{
-    position:absolute;
-
-    width:14px;
-    height:5px;
-
-    background:#ffd740;
-
-    border-radius:5px;
-
-    z-index:80;
-}
-
-
-/* =========================
-   BUTTONS
-========================= */
-
-.controls{
-    position:absolute;
-
-    right:20px;
-    bottom:120px;
-
-    display:flex;
-
-    gap:10px;
-
+    bottom:25px;
     z-index:150;
-}
-
-.gameButton{
     width:125px;
-    height:60px;
-
+    height:65px;
     border:none;
-
-    border-radius:30px;
-
+    border-radius:15px;
     color:white;
-
-    font-size:18px;
+    font-size:22px;
     font-weight:bold;
-
-    box-shadow:
-    0 5px 0 rgba(0,0,0,.3);
+    box-shadow:0 5px 0 rgba(0,0,0,.35);
+    touch-action:none;
 }
 
-.gameButton:active{
+.control:active{
     transform:translateY(4px);
-
-    box-shadow:
-    0 1px 0 rgba(0,0,0,.3);
 }
 
 #jumpButton{
-    background:#e53935;
+    right:25px;
+    background:#2563eb;
 }
 
 #shootButton{
-    background:#263238;
-
+    right:25px;
+    background:#dc2626;
     display:none;
 }
 
 #duckButton{
-    background:#1976d2;
-
+    right:25px;
+    background:#9333ea;
     display:none;
 }
 
+/* ===== WOOD ===== */
 
-/* =========================
-   STAGE MESSAGE
-========================= */
-
-#stageMessage{
+.obstacle{
     position:absolute;
+    width:42px;
+    height:65px;
+    bottom:18%;
+    background:#8b4513;
+    border:4px solid #5b2c0c;
+    border-radius:4px;
+    z-index:10;
+}
 
+.obstacle::before{
+    content:"";
+    position:absolute;
+    left:4px;
+    top:12px;
+    width:26px;
+    height:5px;
+    background:#c27a3c;
+    transform:rotate(-10deg);
+}
+
+.obstacle::after{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:35px;
+    width:25px;
+    height:5px;
+    background:#c27a3c;
+    transform:rotate(8deg);
+}
+
+.hpText{
+    position:absolute;
+    top:-25px;
     left:50%;
-    top:50%;
-
-    transform:
-    translate(-50%,-50%);
-
-    z-index:300;
-
-    display:none;
-
-    min-width:260px;
-
-    padding:25px;
-
-    border-radius:20px;
-
-    background:
-    rgba(0,0,0,.78);
-
+    transform:translateX(-50%);
     color:white;
-
-    text-align:center;
-}
-
-#stageMessage h2{
-    font-size:35px;
-
-    margin-bottom:8px;
-}
-
-#stageMessage p{
-    color:#ddd;
-}
-
-
-/* =========================
-   GAME OVER
-========================= */
-
-#gameOver{
-    position:absolute;
-
-    inset:0;
-
-    z-index:400;
-
-    display:none;
-
-    align-items:center;
-    justify-content:center;
-
-    flex-direction:column;
-
-    background:
-    rgba(0,0,0,.75);
-
-    color:white;
-}
-
-#gameOver h1{
-    font-size:45px;
-
-    margin-bottom:10px;
-}
-
-#gameOver p{
-    font-size:22px;
-}
-
-#restart{
-    margin-top:25px;
-
-    padding:14px 35px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#2196f3;
-
-    color:white;
-
-    font-size:20px;
+    font-size:18px;
     font-weight:bold;
+    text-shadow:2px 2px 3px black;
 }
 
+/* ===== BULLET ===== */
 
-/* =========================
-   MOBILE
-========================= */
+.bullet{
+    position:absolute;
+    width:16px;
+    height:6px;
+    background:#ffd000;
+    border-radius:5px;
+    z-index:30;
+}
 
-@media(max-width:600px){
+/* ===== BIRD ===== */
 
-    #startScreen h1{
-        font-size:38px;
-    }
-
-    #player{
-        left:55px;
-    }
-
-    .controls{
-        right:12px;
-        bottom:115px;
-    }
-
-    .gameButton{
-        width:115px;
-        height:58px;
-    }
-
+.bird{
+    position:absolute;
+    width:55px;
+    height:45px;
+    font-size:42px;
+    z-index:15;
 }
 
 </style>
 </head>
 
-
 <body>
 
+<div id="game" class="stage1">
 
-<div id="game" class="map1">
+    <div id="score">SCORE: 0</div>
 
-
-    <!-- SUN -->
-
-    <div id="sun"></div>
-
-
-    <!-- START -->
-
-    <div id="startScreen">
-
-        <h1>
-            🐕 DOG RUNNER
-        </h1>
-
-        <p>
-            Jump • Shoot • Duck
-        </p>
-
-        <button id="playButton">
-            PLAY ▶
-        </button>
-
+    <div id="stageText">
+        STAGE 1 - DAY
     </div>
 
-
-    <!-- HUD -->
-
-    <div id="hud">
-
-        Score:
-        <span id="score">0</span>
-
-        <br>
-
-        Stage:
-        <span id="stage">1</span>
-
+    <div id="message">
+        DOG RUNNER
     </div>
 
+    <button id="playButton">
+        PLAY
+    </button>
 
-    <!-- MAP NAME -->
-
-    <div id="mapName">
-        🌳 GREEN PARK
-    </div>
-
-
-    <!-- PLAYER -->
-
-    <div id="player">
-        🐕
-    </div>
-
-
-    <!-- GROUND -->
+    <div id="player">🐕</div>
 
     <div id="ground"></div>
 
+    <button id="jumpButton" class="control">
+        JUMP
+    </button>
 
-    <!-- CONTROLS -->
+    <button id="shootButton" class="control">
+        SHOOT
+    </button>
 
-    <div class="controls">
-
-        <button
-            id="jumpButton"
-            class="gameButton"
-        >
-            JUMP 🦘
-        </button>
-
-
-        <button
-            id="shootButton"
-            class="gameButton"
-        >
-            SHOOT 🔫
-        </button>
-
-
-        <button
-            id="duckButton"
-            class="gameButton"
-        >
-            DUCK 🔽
-        </button>
-
-    </div>
-
-
-    <!-- STAGE MESSAGE -->
-
-    <div id="stageMessage">
-
-        <h2 id="stageTitle">
-            STAGE 2
-        </h2>
-
-        <p id="stageText">
-            Military Mode
-        </p>
-
-    </div>
-
-
-    <!-- GAME OVER -->
-
-    <div id="gameOver">
-
-        <h1>
-            GAME OVER 💥
-        </h1>
-
-        <p>
-            Score:
-            <span id="finalScore">0</span>
-        </p>
-
-        <button id="restart">
-            RESTART 🔄
-        </button>
-
-    </div>
-
+    <button id="duckButton" class="control">
+        DUCK
+    </button>
 
 </div>
 
-
 <script>
 
-/* =========================
+/* =====================================================
    ELEMENTS
-========================= */
+===================================================== */
 
-const game =
-document.getElementById("game");
+const game = document.getElementById("game");
+const player = document.getElementById("player");
 
-const player =
-document.getElementById("player");
+const scoreText = document.getElementById("score");
+const stageText = document.getElementById("stageText");
 
-const scoreElement =
-document.getElementById("score");
+const message = document.getElementById("message");
+const playButton = document.getElementById("playButton");
 
-const stageElement =
-document.getElementById("stage");
-
-const mapName =
-document.getElementById("mapName");
-
-const startScreen =
-document.getElementById("startScreen");
-
-const playButton =
-document.getElementById("playButton");
-
-const jumpButton =
-document.getElementById("jumpButton");
-
-const shootButton =
-document.getElementById("shootButton");
-
-const duckButton =
-document.getElementById("duckButton");
-
-const gameOver =
-document.getElementById("gameOver");
-
-const finalScore =
-document.getElementById("finalScore");
-
-const restart =
-document.getElementById("restart");
-
-const stageMessage =
-document.getElementById("stageMessage");
-
-const stageTitle =
-document.getElementById("stageTitle");
-
-const stageText =
-document.getElementById("stageText");
+const jumpButton = document.getElementById("jumpButton");
+const shootButton = document.getElementById("shootButton");
+const duckButton = document.getElementById("duckButton");
 
 
-/* =========================
+/* =====================================================
    VARIABLES
-========================= */
+===================================================== */
 
-let playing=false;
+let gameStarted = false;
+let gameOver = false;
 
-let score=0;
+let score = 0;
+let stage = 1;
 
-let stage=1;
+let playerY = 0;
+let velocityY = 0;
 
-let playerY=0;
+const gravity = 0.75;
+const jumpPower = 13;
 
-let velocity=0;
+let jumping = false;
+let ducking = false;
 
-let jumping=false;
+let obstacles = [];
+let bullets = [];
+let birds = [];
 
-let ducking=false;
+let obstacleTimer = 0;
+let birdTimer = 0;
 
-let speed=5;
-
-let spawnTimer=0;
-
-let nextSpawn=140;
-
-let objects=[];
-
-let bullets=[];
-
-
-/* =========================
-   PHYSICS
-========================= */
-
-const gravity=.75;
-
-const jumpPower=13;
+let lastTime = 0;
 
 
-/* =========================
-   RANDOM
-========================= */
-
-function random(min,max){
-
-    return Math.floor(
-        Math.random() *
-        (max-min+1)
-    ) + min;
-
-}
-
-
-/* =========================
+/* =====================================================
    PLAY
-========================= */
-
-playButton.addEventListener(
-    "click",
-    startGame
-);
-
+===================================================== */
 
 function startGame(){
 
-    startScreen.style.display=
-    "none";
+    if(gameStarted) return;
 
-    playing=true;
+    gameStarted = true;
+    gameOver = false;
 
-    gameLoop();
+    score = 0;
+    stage = 1;
 
+    playerY = 0;
+    velocityY = 0;
+
+    jumping = false;
+    ducking = false;
+
+    obstacleTimer = 0;
+    birdTimer = 0;
+
+    clearObjects();
+
+    message.style.display = "none";
+    playButton.style.display = "none";
+
+    player.textContent = "🐕";
+    player.classList.remove("duck");
+
+    updateStage();
+
+    lastTime = performance.now();
+
+    requestAnimationFrame(gameLoop);
 }
 
+playButton.addEventListener("click",startGame);
 
-/* =========================
+playButton.addEventListener("touchstart",(e)=>{
+    e.preventDefault();
+    startGame();
+},{passive:false});
+
+
+/* =====================================================
    JUMP
-========================= */
+===================================================== */
 
 function jump(){
 
-    if(!playing)
-    return;
+    if(!gameStarted || gameOver) return;
 
-    if(stage!==1)
-    return;
+    if(stage === 3) return;
 
-    if(jumping)
-    return;
+    if(jumping) return;
 
-    jumping=true;
-
-    velocity=jumpPower;
-
+    jumping = true;
+    velocityY = jumpPower;
 }
 
+jumpButton.addEventListener("click",jump);
 
-/* =========================
-   DUCK
-========================= */
-
-function startDuck(){
-
-    if(!playing)
-    return;
-
-    if(stage<3)
-    return;
-
-    ducking=true;
-
-    player.classList.add(
-        "duck"
-    );
-
-}
+jumpButton.addEventListener("touchstart",(e)=>{
+    e.preventDefault();
+    jump();
+},{passive:false});
 
 
-function stopDuck(){
+/* =====================================================
+   KEYBOARD
+===================================================== */
 
-    ducking=false;
+document.addEventListener("keydown",(e)=>{
 
-    player.classList.remove(
-        "duck"
-    );
-
-}
-
-
-/* =========================
-   SHOOT
-========================= */
-
-function shoot(){
-
-    if(!playing)
-    return;
-
-    if(stage!==2)
-    return;
-
-
-    const bullet=
-    document.createElement("div");
-
-    bullet.className=
-    "bullet";
-
-
-    const box=
-    player.getBoundingClientRect();
-
-
-    bullet.style.left=
-    (box.right-5)+"px";
-
-    bullet.style.top=
-    (box.top+32)+"px";
-
-
-    game.appendChild(
-        bullet
-    );
-
-
-    bullets.push({
-
-        element:bullet,
-
-        x:box.right
-
-    });
-
-}
-
-
-/* =========================
-   BUTTON EVENTS
-========================= */
-
-jumpButton.addEventListener(
-    "touchstart",
-    function(e){
-
+    if(
+        e.code === "Space" ||
+        e.code === "ArrowUp"
+    ){
         e.preventDefault();
-
         jump();
+    }
 
-    },
-    {passive:false}
-);
+    if(
+        e.code === "ArrowDown" &&
+        stage === 3
+    ){
+        startDuck(e);
+    }
 
-jumpButton.addEventListener(
-    "click",
-    jump
-);
-
-
-shootButton.addEventListener(
-    "touchstart",
-    function(e){
-
-        e.preventDefault();
-
+    if(e.code === "KeyX"){
         shoot();
+    }
+});
 
-    },
-    {passive:false}
-);
+document.addEventListener("keyup",(e)=>{
 
-shootButton.addEventListener(
-    "click",
-    shoot
-);
+    if(e.code === "ArrowDown"){
+        stopDuck(e);
+    }
+});
 
+
+/* =====================================================
+   DUCK
+   FIXED FOR PHONE
+===================================================== */
+
+function startDuck(e){
+
+    if(e) e.preventDefault();
+
+    if(stage !== 3 || gameOver) return;
+
+    ducking = true;
+
+    player.classList.add("duck");
+}
+
+function stopDuck(e){
+
+    if(e) e.preventDefault();
+
+    ducking = false;
+
+    player.classList.remove("duck");
+}
+
+
+/* Touch */
 
 duckButton.addEventListener(
     "touchstart",
-    function(e){
-
-        e.preventDefault();
-
-        startDuck();
-
-    },
+    startDuck,
     {passive:false}
 );
-
 
 duckButton.addEventListener(
     "touchend",
-    function(e){
-
-        e.preventDefault();
-
-        stopDuck();
-
-    },
+    stopDuck,
     {passive:false}
 );
 
+duckButton.addEventListener(
+    "touchcancel",
+    stopDuck,
+    {passive:false}
+);
+
+
+/* Mouse */
 
 duckButton.addEventListener(
     "mousedown",
@@ -1082,532 +548,658 @@ duckButton.addEventListener(
     stopDuck
 );
 
-
-/* KEYBOARD */
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(
-            e.code==="Space" ||
-            e.code==="ArrowUp"
-        ){
-
-            jump();
-
-        }
-
-
-        if(
-            e.code==="ArrowDown"
-        ){
-
-            startDuck();
-
-        }
-
-
-        if(
-            e.code==="KeyX"
-        ){
-
-            shoot();
-
-        }
-
-    }
+duckButton.addEventListener(
+    "mouseleave",
+    stopDuck
 );
 
 
-document.addEventListener(
-    "keyup",
-    function(e){
+/* =====================================================
+   SHOOT
+===================================================== */
 
-        if(
-            e.code==="ArrowDown"
-        ){
+function shoot(){
 
-            stopDuck();
+    if(
+        !gameStarted ||
+        gameOver ||
+        stage !== 2
+    ) return;
 
-        }
+    const rect =
+        player.getBoundingClientRect();
 
+    const gameRect =
+        game.getBoundingClientRect();
+
+    const bullet =
+        document.createElement("div");
+
+    bullet.className = "bullet";
+
+    bullet.x =
+        rect.right -
+        gameRect.left;
+
+    bullet.y =
+        rect.top -
+        gameRect.top +
+        30;
+
+    bullet.style.left =
+        bullet.x + "px";
+
+    bullet.style.top =
+        bullet.y + "px";
+
+    game.appendChild(bullet);
+
+    bullets.push(bullet);
+}
+
+shootButton.addEventListener("click",shoot);
+
+shootButton.addEventListener("touchstart",(e)=>{
+    e.preventDefault();
+    shoot();
+},{passive:false});
+
+
+/* =====================================================
+   CREATE OBSTACLE
+===================================================== */
+
+function createObstacle(){
+
+    const obstacle =
+        document.createElement("div");
+
+    obstacle.className = "obstacle";
+
+    obstacle.x =
+        window.innerWidth + 30;
+
+    obstacle.hp = 3;
+
+    obstacle.style.left =
+        obstacle.x + "px";
+
+    if(stage === 2){
+
+        const hp =
+            document.createElement("div");
+
+        hp.className = "hpText";
+        hp.textContent = "3";
+
+        obstacle.appendChild(hp);
+
+        obstacle.hpText = hp;
     }
-);
 
+    game.appendChild(obstacle);
 
-/* =========================
-   CREATE WALL
-========================= */
-
-function createWall(){
-
-    const wall=
-    document.createElement(
-        "div"
-    );
-
-    wall.className=
-    "wall";
-
-    wall.style.right=
-    "-80px";
-
-
-    if(stage===2){
-
-        wall.dataset.hp=3;
-
-
-        const bar=
-        document.createElement(
-            "div"
-        );
-
-        bar.className=
-        "healthBar";
-
-
-        const fill=
-        document.createElement(
-            "div"
-        );
-
-        fill.className=
-        "healthFill";
-
-
-        bar.appendChild(fill);
-
-        wall.appendChild(bar);
-
-    }
-
-
-    game.appendChild(
-        wall
-    );
-
-
-    objects.push({
-
-        element:wall,
-
-        type:"wall",
-
-        hp:
-        stage===2 ? 3 : 1,
-
-        passed:false
-
-    });
-
+    obstacles.push(obstacle);
 }
 
 
-/* =========================
+/* =====================================================
    CREATE BIRD
-========================= */
+===================================================== */
 
 function createBird(){
 
-    const bird=
-    document.createElement(
-        "div"
-    );
+    const bird =
+        document.createElement("div");
 
-    bird.className=
-    "bird";
+    bird.className = "bird";
 
-    bird.textContent="🐦";
+    bird.textContent = "🦅";
 
+    bird.x =
+        window.innerWidth + 60;
 
-    bird.style.top=
-    random(145,230)+"px";
+    /*
+       BIRD RAISED HIGHER
+       So it flies clearly above the dog.
+    */
 
-    bird.style.right=
-    "-90px";
+    bird.y =
+        game.clientHeight * 0.82 - 105;
 
+    bird.y +=
+        Math.random() * 15 - 7;
 
-    game.appendChild(
-        bird
-    );
+    bird.style.left =
+        bird.x + "px";
 
+    bird.style.top =
+        bird.y + "px";
 
-    objects.push({
+    game.appendChild(bird);
 
-        element:bird,
-
-        type:"bird",
-
-        passed:false
-
-    });
-
+    birds.push(bird);
 }
 
 
-/* =========================
-   COLLISION
-========================= */
+/* =====================================================
+   CLEAR OBJECTS
+===================================================== */
 
-function collision(a,b){
+function clearObjects(){
 
-    const A=
-    a.getBoundingClientRect();
+    obstacles.forEach(o=>o.remove());
+    bullets.forEach(b=>b.remove());
+    birds.forEach(b=>b.remove());
 
-    const B=
-    b.getBoundingClientRect();
-
-
-    return(
-        A.left<B.right &&
-        A.right>B.left &&
-        A.top<B.bottom &&
-        A.bottom>B.top
-    );
-
+    obstacles = [];
+    bullets = [];
+    birds = [];
 }
 
 
-/* =========================
-   CHECK OBJECTS
-========================= */
+/* =====================================================
+   STAGE
+===================================================== */
 
-function checkObjects(){
+function updateStage(){
 
-    for(
-        let i=objects.length-1;
-        i>=0;
-        i--
-    ){
+    updateMap();
+    updateControls();
 
-        const obj=
-        objects[i];
+    if(stage === 1){
 
-        const element=
-        obj.element;
+        player.textContent = "🐕";
+
+        stageText.textContent =
+            "STAGE 1 - DAY";
+    }
+
+    else if(stage === 2){
+
+        player.textContent = "🪖🐕";
+
+        stageText.textContent =
+            "STAGE 2 - MILITARY DAY";
+    }
+
+    else if(stage === 3){
+
+        player.textContent = "🐕";
+
+        stageText.textContent =
+            "STAGE 3 - SKY DAY";
+    }
+
+    else if(stage === 4){
+
+        player.textContent = "🐕";
+
+        stageText.textContent =
+            "STAGE 4 - VOLCANO";
+    }
+
+    else if(stage === 5){
+
+        player.textContent = "🐕";
+
+        stageText.textContent =
+            "STAGE 5 - NIGHT";
+    }
+
+    else{
+
+        player.textContent = "🐕";
+
+        stageText.textContent =
+            "STAGE " +
+            stage +
+            " - DARK ZONE";
+    }
+}
 
 
-        const box=
-        element.getBoundingClientRect();
+/* =====================================================
+   MAP
+===================================================== */
 
-        const playerBox=
+function updateMap(){
+
+    game.className = "";
+
+    if(stage === 1){
+        game.classList.add("stage1");
+    }
+
+    else if(stage === 2){
+        game.classList.add("stage2");
+    }
+
+    else if(stage === 3){
+        game.classList.add("stage3");
+    }
+
+    else if(stage === 4){
+        game.classList.add("stage4");
+    }
+
+    else if(stage === 5){
+        game.classList.add("stage5");
+    }
+
+    else{
+        game.classList.add("stage6");
+    }
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+function updateControls(){
+
+    jumpButton.style.display =
+        stage === 1 ||
+        stage >= 4
+        ? "block"
+        : "none";
+
+    shootButton.style.display =
+        stage === 2
+        ? "block"
+        : "none";
+
+    duckButton.style.display =
+        stage === 3
+        ? "block"
+        : "none";
+}
+
+
+/* =====================================================
+   PLAYER HITBOX
+===================================================== */
+
+function getPlayerBox(){
+
+    const gameRect =
+        game.getBoundingClientRect();
+
+    const rect =
         player.getBoundingClientRect();
 
 
-        /*
-           بعيد بزاف
-        */
+    /*
+       STAGE 3:
+       Only the head is dangerous.
+    */
 
-        if(
-            box.left>
-            playerBox.right+20
-        ){
+    if(stage === 3){
 
-            continue;
+        if(ducking){
 
+            return {
+
+                left:
+                    rect.left -
+                    gameRect.left + 25,
+
+                right:
+                    rect.right -
+                    gameRect.left - 25,
+
+                top:
+                    rect.top -
+                    gameRect.top + 36,
+
+                bottom:
+                    rect.top -
+                    gameRect.top + 58
+            };
         }
 
+        return {
 
-        /*
-           داز
-        */
+            left:
+                rect.left -
+                gameRect.left + 18,
 
-        if(
-            box.right<
-            playerBox.left
-        ){
+            right:
+                rect.right -
+                gameRect.left - 18,
 
-            continue;
+            top:
+                rect.top -
+                gameRect.top + 10,
 
-        }
-
-
-        /* WALL */
-
-        if(
-            obj.type==="wall"
-        ){
-
-            if(
-                collision(
-                    player,
-                    element
-                )
-            ){
-
-                endGame();
-
-                return;
-
-            }
-
-        }
-
-
-        /* BIRD */
-
-        if(
-            obj.type==="bird"
-        ){
-
-            if(
-                !ducking &&
-                collision(
-                    player,
-                    element
-                )
-            ){
-
-                endGame();
-
-                return;
-
-            }
-
-        }
-
+            bottom:
+                rect.top -
+                gameRect.top + 38
+        };
     }
 
+
+    /*
+       Normal stages:
+       only feet collide.
+    */
+
+    return {
+
+        left:
+            rect.left -
+            gameRect.left + 22,
+
+        right:
+            rect.right -
+            gameRect.left - 22,
+
+        top:
+            rect.bottom -
+            gameRect.top - 28,
+
+        bottom:
+            rect.bottom -
+            gameRect.top - 3
+    };
 }
 
 
-/* =========================
-   BULLETS
-========================= */
+/* =====================================================
+   COLLISION
+===================================================== */
 
-function updateBullets(){
+function collision(a,b){
 
-    for(
-        let i=bullets.length-1;
-        i>=0;
-        i--
-    ){
-
-        const bullet=
-        bullets[i];
-
-
-        let x=
-        parseFloat(
-            bullet.element.style.left
-        );
-
-
-        x+=13;
-
-
-        bullet.element.style.left=
-        x+"px";
-
-
-        for(
-            let j=objects.length-1;
-            j>=0;
-            j--
-        ){
-
-            const obj=
-            objects[j];
-
-
-            if(
-                obj.type!=="wall"
-            )
-            continue;
-
-
-            if(
-                collision(
-                    bullet.element,
-                    obj.element
-                )
-            ){
-
-                obj.hp--;
-
-
-                const fill=
-                obj.element.querySelector(
-                    ".healthFill"
-                );
-
-
-                if(fill){
-
-                    fill.style.width=
-                    (obj.hp/3*100)+"%";
-
-                }
-
-
-                if(
-                    obj.hp<=0
-                ){
-
-                    obj.element.remove();
-
-                    objects.splice(
-                        j,
-                        1
-                    );
-
-                }
-
-
-                bullet.element.remove();
-
-                bullets.splice(
-                    i,
-                    1
-                );
-
-                break;
-
-            }
-
-        }
-
-
-        if(
-            x>
-            window.innerWidth+100
-        ){
-
-            bullet.element.remove();
-
-            bullets.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================
-   CHANGE MAP
-========================= */
-
-function changeMap(){
-
-    game.classList.remove(
-        "map1",
-        "map2",
-        "map3",
-        "map4",
-        "map5"
+    return(
+        a.left < b.right &&
+        a.right > b.left &&
+        a.top < b.bottom &&
+        a.bottom > b.top
     );
+}
 
 
-    /* STAGE 1 */
+/* =====================================================
+   OBSTACLE HITBOX
+===================================================== */
 
-    if(stage===1){
+function getObstacleBox(o){
 
-        game.classList.add(
-            "map1"
-        );
+    const gameRect =
+        game.getBoundingClientRect();
 
-        mapName.textContent=
-        "🌳 GREEN PARK";
+    const rect =
+        o.getBoundingClientRect();
 
-        player.textContent=
-        "🐕";
+    return {
 
-        jumpButton.style.display=
-        "block";
+        left:
+            rect.left -
+            gameRect.left + 5,
 
-        shootButton.style.display=
-        "none";
+        right:
+            rect.right -
+            gameRect.left - 5,
 
-        duckButton.style.display=
-        "none";
+        top:
+            rect.top -
+            gameRect.top + 3,
 
+        bottom:
+            rect.bottom -
+            gameRect.top - 3
+    };
+}
+
+
+/* =====================================================
+   BIRD HITBOX
+===================================================== */
+
+function getBirdBox(b){
+
+    /*
+       Small hitbox to avoid
+       false collisions.
+    */
+
+    return {
+
+        left:
+            b.x + 10,
+
+        right:
+            b.x + 43,
+
+        top:
+            b.y + 10,
+
+        bottom:
+            b.y + 34
+    };
+}
+
+
+/* =====================================================
+   SPEED
+===================================================== */
+
+function getGameSpeed(){
+
+    /*
+       Stage 1 = 5
+       Stage 2 = 5.35
+       Stage 3 = 5.70
+       Stage 4 = 6.05
+       Stage 5 = 6.40
+
+       Stage 6+
+       +0.5 every stage.
+    */
+
+    if(stage <= 5){
+
+        return 5 +
+            (stage - 1) * 0.35;
     }
 
+    return 6.4 +
+        (stage - 5) * 0.5;
+}
 
-    /* STAGE 2 */
 
-    else if(stage===2){
+/* =====================================================
+   GAME LOOP
+===================================================== */
 
-        game.classList.add(
-            "map2"
+function gameLoop(time){
+
+    if(!gameStarted || gameOver)
+        return;
+
+    const delta =
+        Math.min(
+            (time-lastTime)/16.67,
+            2
         );
 
-        mapName.textContent=
-        "🪖 MILITARY BASE";
+    lastTime = time;
 
-        player.textContent=
-        "🪖";
+    updatePlayer(delta);
 
-        jumpButton.style.display=
-        "none";
+    updateScore(delta);
 
-        shootButton.style.display=
-        "block";
+    updateStageIfNeeded();
 
-        duckButton.style.display=
-        "none";
+    updateObstacles(delta);
 
+    updateBullets(delta);
+
+    updateBirds(delta);
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+/* =====================================================
+   PLAYER PHYSICS
+===================================================== */
+
+function updatePlayer(delta){
+
+    if(stage === 3){
+
+        playerY = 0;
+        velocityY = 0;
+        jumping = false;
+
+    }else{
+
+        if(jumping){
+
+            velocityY -=
+                gravity * delta;
+
+            playerY +=
+                velocityY * delta;
+
+            if(playerY <= 0){
+
+                playerY = 0;
+                velocityY = 0;
+                jumping = false;
+            }
+        }
     }
 
+    /*
+       Apply vertical jump.
+       DUCK is applied separately by CSS.
+    */
 
-    /* STAGE 3 */
+    if(!ducking){
 
-    else if(stage===3){
+        player.style.transform =
+            `translateY(${-playerY}px)`;
 
-        game.classList.add(
-            "map3"
-        );
+    }else if(stage === 3){
 
-        mapName.textContent=
-        "☁️ SKY ZONE";
-
-        player.textContent=
-        "🐕";
-
-        jumpButton.style.display=
-        "none";
-
-        shootButton.style.display=
-        "none";
-
-        duckButton.style.display=
-        "block";
-
+        player.style.transform =
+            "translateY(24px) scaleY(.60)";
     }
+}
 
 
-    /* STAGE 4 */
+/* =====================================================
+   SCORE
+===================================================== */
 
-    else if(stage===4){
+function updateScore(delta){
 
-        game.classList.add(
-            "map4"
-        );
+    score +=
+        0.025 * delta;
 
-        mapName.textContent=
-        "🌋 VOLCANO";
+    scoreText.textContent =
+        "SCORE: " +
+        Math.floor(score);
+}
 
-        player.textContent=
-        "🐕";
 
-        jumpButton.style.display=
-        "none";
+/* =====================================================
+   STAGE CHANGE
+===================================================== */
 
-        shootButton.style.display=
-        "none";
+function updateStageIfNeeded(){
 
-        duckButton.style.display=
-        "block";
+    const newStage =
+        Math.floor(score / 50) + 1;
 
+    if(newStage !== stage){
+
+        stage = newStage;
+
+        /*
+           Clean previous stage.
+        */
+
+        clearObjects();
+
+        obstacleTimer = 0;
+        birdTimer = 0;
+
+        playerY = 0;
+        velocityY = 0;
+
+        jumping = false;
+        ducking = false;
+
+        player.classList.remove("duck");
+
+        player.style.transform =
+            "translateY(0)";
+
+        updateStage();
+
+        showStageMessage();
     }
+}
 
 
-    /* STAGE 5+ */
+/* =====================================================
+   STAGE MESSAGE
+===================================================== */
 
-    else
+function showStageMessage(){
+
+    message.style.display = "block";
+
+    message.textContent =
+        "STAGE " + stage;
+
+    setTimeout(()=>{
+
+        if(!gameOver){
+
+            message.style.display =
+                "none";
+        }
+
+    },1200);
+}
+
+
+/* =====================================================
+   OBSTACLES
+===================================================== */
+
+function updateObstacles(delta){
+
+    if(stage === 3)
+        return;
+
+    obstacleTimer += delta;
+
+    let spawnTime;
+
+    if(stage <= 5){
+
+        spawnTime =
+            stage === 1
+            ? 100
+            : 115;
+
+    }else{
+
+        /*
+           Obstacles spawn faster
+           after Stage 5.
+        */
+
+        spawnTime =
+            Math.max(
+                55,
+                115 -
+                (stage - 5) * 3
+   
