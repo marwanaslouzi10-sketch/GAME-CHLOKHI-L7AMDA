@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Dog Runner</title>
 
 <style>
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
     user-select:none;
     -webkit-user-select:none;
 }
@@ -20,7 +18,6 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#58c5ff;
     font-family:Arial,sans-serif;
 }
 
@@ -30,62 +27,53 @@ html,body{
     height:100vh;
     overflow:hidden;
     background:linear-gradient(
-        #58c5ff 0%,
-        #c8efff 58%,
-        #70c653 58%,
-        #369530 100%
+        #55c8ff 0%,
+        #c8f1ff 58%,
+        #6bc653 58%,
+        #35952f 100%
     );
 }
 
 /* MAPS */
 
-#game.stage1{
+#game.s2{
     background:linear-gradient(
-        #58c5ff 0%,
-        #c8efff 58%,
-        #70c653 58%,
-        #369530 100%
+        #92999d 0%,
+        #cbd0d2 55%,
+        #55595c 55%,
+        #292b2e 100%
     );
 }
 
-#game.stage2{
+#game.s3{
     background:linear-gradient(
-        #8b959a 0%,
-        #c7cbcd 55%,
-        #606568 55%,
-        #303336 100%
+        #16aef5 0%,
+        #8de0ff 65%,
+        #eafaff 100%
     );
 }
 
-#game.stage3{
+#game.s4{
     background:linear-gradient(
-        #20adf5 0%,
-        #8cdeff 65%,
-        #e5f8ff 100%
+        #ffae4f 0%,
+        #e65c30 50%,
+        #70251c 75%,
+        #210707 100%
     );
 }
 
-#game.stage4{
+#game.s5{
     background:linear-gradient(
-        #ffae50 0%,
-        #e65d32 50%,
-        #70241d 75%,
-        #250909 100%
+        #11172c 0%,
+        #222c4a 55%,
+        #070910 100%
     );
 }
 
-#game.stage5{
+#game.s6{
     background:linear-gradient(
-        #11172b 0%,
-        #202945 55%,
-        #080a11 100%
-    );
-}
-
-#game.stage6{
-    background:linear-gradient(
-        #070918 0%,
-        #181c38 55%,
+        #060817 0%,
+        #181d3a 55%,
         #030409 100%
     );
 }
@@ -98,25 +86,24 @@ html,body{
     bottom:0;
     width:100%;
     height:18%;
-    background:#399c32;
-    z-index:5;
+    background:#399b32;
 }
 
-.stage2 #ground{
-    background:#34383b;
+.s2 #ground{
+    background:#36393b;
 }
 
-.stage3 #ground{
-    background:rgba(255,255,255,.25);
+.s3 #ground{
+    background:#dcecff;
 }
 
-.stage4 #ground{
-    background:#301010;
+.s4 #ground{
+    background:#3b100b;
 }
 
-.stage5 #ground,
-.stage6 #ground{
-    background:#08090e;
+.s5 #ground,
+.s6 #ground{
+    background:#080a12;
 }
 
 /* SCORE */
@@ -125,66 +112,53 @@ html,body{
     position:absolute;
     top:15px;
     left:15px;
-    z-index:100;
     color:white;
     font-size:24px;
     font-weight:bold;
-    text-shadow:2px 2px 4px black;
+    z-index:100;
+    text-shadow:2px 2px 4px #000;
 }
 
 #stage{
     position:absolute;
     top:48px;
     left:15px;
-    z-index:100;
     color:white;
     font-size:18px;
     font-weight:bold;
-    text-shadow:2px 2px 4px black;
+    z-index:100;
+    text-shadow:2px 2px 4px #000;
 }
 
-/* PLAYER */
+/* DOG */
 
-#player{
+#dog{
     position:absolute;
-    left:11%;
+    left:10%;
     bottom:18%;
     width:70px;
     height:70px;
-    z-index:20;
-
-    font-size:50px;
+    font-size:48px;
     line-height:70px;
     text-align:center;
-
-    transform:translateY(0);
-}
-
-#player.duck{
-    transform:
-        translateY(24px)
-        scaleY(.6);
+    z-index:20;
+    transform-origin:center bottom;
 }
 
 /* BUTTONS */
 
-.control{
+.btn{
     position:absolute;
     right:25px;
     bottom:25px;
-
     width:125px;
     height:65px;
-
     border:0;
     border-radius:15px;
-
     color:white;
     font-size:21px;
     font-weight:bold;
-
     z-index:100;
-
     touch-action:none;
 }
 
@@ -204,80 +178,58 @@ html,body{
 
 /* WOOD */
 
-.obstacle{
+.wood{
     position:absolute;
-
     width:42px;
     height:65px;
-
     bottom:18%;
-
     background:#8b4513;
-    border:4px solid #5b2c0c;
-
+    border:4px solid #572b0b;
     border-radius:4px;
-
     z-index:10;
 }
 
-.obstacle:before{
+.wood:before{
     content:"";
     position:absolute;
-
-    left:4px;
-    top:12px;
-
     width:26px;
     height:5px;
-
-    background:#c27a3c;
-
+    left:4px;
+    top:12px;
+    background:#c47b3c;
     transform:rotate(-10deg);
 }
 
-.obstacle:after{
+.wood:after{
     content:"";
     position:absolute;
-
-    left:5px;
-    top:35px;
-
     width:25px;
     height:5px;
-
-    background:#c27a3c;
-
+    left:5px;
+    top:36px;
+    background:#c47b3c;
     transform:rotate(8deg);
 }
-
-/* HP */
 
 .hp{
     position:absolute;
     top:-25px;
     left:50%;
-
     transform:translateX(-50%);
-
     color:white;
     font-size:18px;
     font-weight:bold;
-
-    text-shadow:2px 2px 3px black;
+    text-shadow:2px 2px 3px #000;
 }
 
 /* BULLET */
 
 .bullet{
     position:absolute;
-
-    width:16px;
+    width:17px;
     height:6px;
-
     background:#ffd000;
-
     border-radius:5px;
-
     z-index:30;
 }
 
@@ -285,41 +237,28 @@ html,body{
 
 .bird{
     position:absolute;
-
     width:55px;
     height:45px;
-
-    font-size:40px;
-
+    font-size:38px;
     z-index:15;
 }
 
 /* GAME OVER */
 
-#gameOver{
+#over{
     position:absolute;
-
-    top:40%;
     left:50%;
-
+    top:40%;
     transform:translate(-50%,-50%);
-
-    z-index:300;
-
     color:white;
-
+    text-align:center;
     font-size:42px;
     font-weight:bold;
-
-    text-align:center;
-
-    text-shadow:3px 3px 7px black;
-
+    text-shadow:3px 3px 7px #000;
+    z-index:200;
     display:none;
-
-    pointer-events:none;
+    width:90%;
 }
-
 </style>
 </head>
 
@@ -328,136 +267,168 @@ html,body{
 <div id="game">
 
     <div id="score">SCORE: 0</div>
+    <div id="stage">STAGE 1 - DAY</div>
 
-    <div id="stage">
-        STAGE 1 - DAY
-    </div>
+    <div id="over"></div>
 
-    <div id="gameOver">
-        GAME OVER
-    </div>
-
-    <div id="player">🐕</div>
+    <div id="dog">🐕</div>
 
     <div id="ground"></div>
 
-    <button id="jump" class="control">
-        JUMP
-    </button>
-
-    <button id="shoot" class="control">
-        SHOOT
-    </button>
-
-    <button id="duck" class="control">
-        DUCK
-    </button>
+    <button id="jump" class="btn">JUMP</button>
+    <button id="shoot" class="btn">SHOOT</button>
+    <button id="duck" class="btn">DUCK</button>
 
 </div>
 
 <script>
 
-/* =========================
-   ELEMENTS
-========================= */
+/* ==============================
+   GAME
+============================== */
 
-const game =
-    document.getElementById("game");
+const game = document.getElementById("game");
+const dog = document.getElementById("dog");
+const scoreText = document.getElementById("score");
+const stageText = document.getElementById("stage");
+const over = document.getElementById("over");
 
-const player =
-    document.getElementById("player");
-
-const scoreText =
-    document.getElementById("score");
-
-const stageText =
-    document.getElementById("stage");
-
-const gameOverText =
-    document.getElementById("gameOver");
-
-const jumpButton =
-    document.getElementById("jump");
-
-const shootButton =
-    document.getElementById("shoot");
-
-const duckButton =
-    document.getElementById("duck");
-
-
-/* =========================
-   GAME VARIABLES
-========================= */
-
-let running = true;
-let dead = false;
+const jumpButton = document.getElementById("jump");
+const shootButton = document.getElementById("shoot");
+const duckButton = document.getElementById("duck");
 
 let score = 0;
 let stage = 1;
 
-let y = 0;
-let velocity = 0;
+let playing = true;
+let gameOver = false;
 
+let dogY = 0;
+let velocity = 0;
 let jumping = false;
 let ducking = false;
 
-let obstacles = [];
+let woods = [];
 let bullets = [];
 let birds = [];
 
-let obstacleTimer = 0;
+let woodTimer = 0;
 let birdTimer = 0;
 
 let lastTime = performance.now();
 
 
-/* =========================
-   START
-========================= */
+/* ==============================
+   STAGE
+============================== */
 
-function start(){
+function updateStage(){
 
-    running = true;
-    dead = false;
+    game.className = "";
 
-    score = 0;
-    stage = 1;
+    if(stage === 1){
 
-    y = 0;
-    velocity = 0;
+        game.classList.add("stage1");
 
-    jumping = false;
-    ducking = false;
+        stageText.textContent =
+            "STAGE 1 - DAY";
 
-    obstacleTimer = 0;
-    birdTimer = 0;
+        dog.textContent = "🐕";
+    }
 
-    clearAll();
+    else if(stage === 2){
 
-    gameOverText.style.display = "none";
+        game.classList.add("s2");
 
-    player.textContent = "🐕";
+        stageText.textContent =
+            "STAGE 2 - MILITARY DAY";
 
-    player.style.transform =
-        "translateY(0)";
+        dog.textContent = "🪖🐕";
+    }
 
-    updateStage();
+    else if(stage === 3){
 
-    lastTime =
-        performance.now();
+        game.classList.add("s3");
 
-    requestAnimationFrame(loop);
+        stageText.textContent =
+            "STAGE 3 - SKY DAY";
+
+        dog.textContent = "🐕";
+    }
+
+    else if(stage === 4){
+
+        game.classList.add("s4");
+
+        stageText.textContent =
+            "STAGE 4 - VOLCANO";
+
+        dog.textContent = "🐕";
+    }
+
+    else if(stage === 5){
+
+        game.classList.add("s5");
+
+        stageText.textContent =
+            "STAGE 5 - NIGHT";
+
+        dog.textContent = "🐕";
+    }
+
+    else{
+
+        game.classList.add("s6");
+
+        stageText.textContent =
+            "STAGE " + stage + " - DARK ZONE";
+
+        dog.textContent = "🐕";
+    }
+
+
+    /* BUTTONS */
+
+    jumpButton.style.display =
+        (stage === 1 || stage >= 4)
+        ? "block"
+        : "none";
+
+    shootButton.style.display =
+        stage === 2
+        ? "block"
+        : "none";
+
+    duckButton.style.display =
+        stage === 3
+        ? "block"
+        : "none";
 }
 
 
-/* =========================
+/* ==============================
+   CLEAR OLD OBJECTS
+============================== */
+
+function clearObjects(){
+
+    woods.forEach(w => w.remove());
+    bullets.forEach(b => b.remove());
+    birds.forEach(b => b.remove());
+
+    woods = [];
+    bullets = [];
+    birds = [];
+}
+
+
+/* ==============================
    JUMP
-========================= */
+============================== */
 
 function jump(){
 
-    if(!running || dead)
+    if(!playing || gameOver)
         return;
 
     if(stage === 3)
@@ -467,52 +438,96 @@ function jump(){
         return;
 
     jumping = true;
-
     velocity = 13;
 }
 
+jumpButton.addEventListener("click", jump);
 
-jumpButton.addEventListener(
-    "pointerdown",
-    function(e){
+document.addEventListener("keydown", function(e){
 
+    if(e.code === "Space" || e.code === "ArrowUp"){
         e.preventDefault();
-
         jump();
     }
-);
+
+    if(e.code === "ArrowDown" && stage === 3){
+        ducking = true;
+    }
+
+    if(e.code === "KeyX"){
+        shoot();
+    }
+});
+
+document.addEventListener("keyup", function(e){
+
+    if(e.code === "ArrowDown"){
+        ducking = false;
+    }
+});
 
 
-/* =========================
+/* ==============================
+   DUCK
+============================== */
+
+duckButton.addEventListener("pointerdown", function(e){
+
+    e.preventDefault();
+
+    if(stage === 3 && playing && !gameOver){
+        ducking = true;
+    }
+});
+
+duckButton.addEventListener("pointerup", function(e){
+
+    e.preventDefault();
+    ducking = false;
+});
+
+duckButton.addEventListener("pointercancel", function(){
+    ducking = false;
+});
+
+duckButton.addEventListener("pointerleave", function(){
+    ducking = false;
+});
+
+
+/* ==============================
    SHOOT
-========================= */
+============================== */
 
 function shoot(){
 
     if(
-        !running ||
-        dead ||
+        !playing ||
+        gameOver ||
         stage !== 2
-    )
+    ){
         return;
+    }
 
-    const r =
-        player.getBoundingClientRect();
+    const dogRect =
+        dog.getBoundingClientRect();
 
-    const g =
+    const gameRect =
         game.getBoundingClientRect();
 
     const bullet =
         document.createElement("div");
 
-    bullet.className =
-        "bullet";
+    bullet.className = "bullet";
 
     bullet.x =
-        r.right - g.left;
+        dogRect.right -
+        gameRect.left;
 
     bullet.y =
-        r.top - g.top + 30;
+        dogRect.top -
+        gameRect.top +
+        32;
 
     bullet.style.left =
         bullet.x + "px";
@@ -525,141 +540,27 @@ function shoot(){
     bullets.push(bullet);
 }
 
-
-shootButton.addEventListener(
-    "pointerdown",
-    function(e){
-
-        e.preventDefault();
-
-        shoot();
-    }
-);
+shootButton.addEventListener("click", shoot);
 
 
-/* =========================
-   DUCK
-========================= */
+/* ==============================
+   WOOD
+============================== */
 
-function duckStart(e){
+function createWood(){
 
-    if(e)
-        e.preventDefault();
-
-    if(
-        !running ||
-        dead ||
-        stage !== 3
-    )
-        return;
-
-    ducking = true;
-
-    player.classList.add("duck");
-}
-
-
-function duckStop(e){
-
-    if(e)
-        e.preventDefault();
-
-    ducking = false;
-
-    player.classList.remove("duck");
-}
-
-
-duckButton.addEventListener(
-    "pointerdown",
-    duckStart
-);
-
-duckButton.addEventListener(
-    "pointerup",
-    duckStop
-);
-
-duckButton.addEventListener(
-    "pointercancel",
-    duckStop
-);
-
-duckButton.addEventListener(
-    "pointerleave",
-    duckStop
-);
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(
-            e.code === "Space" ||
-            e.code === "ArrowUp"
-        ){
-
-            e.preventDefault();
-
-            jump();
-        }
-
-        if(
-            e.code === "ArrowDown"
-        ){
-
-            duckStart(e);
-        }
-
-        if(
-            e.code === "KeyX"
-        ){
-
-            shoot();
-        }
-    }
-);
-
-
-document.addEventListener(
-    "keyup",
-    function(e){
-
-        if(
-            e.code === "ArrowDown"
-        ){
-
-            duckStop(e);
-        }
-    }
-);
-
-
-/* =========================
-   OBSTACLE
-========================= */
-
-function createObstacle(){
-
-    const o =
+    const wood =
         document.createElement("div");
 
-    o.className =
-        "obstacle";
+    wood.className = "wood";
 
-    o.x =
-        window.innerWidth + 20;
+    wood.x =
+        window.innerWidth + 30;
 
-    o.hp = 3;
+    wood.hp = 3;
 
-    o.style.left =
-        o.x + "px";
-
+    wood.style.left =
+        wood.x + "px";
 
     if(stage === 2){
 
@@ -667,247 +568,54 @@ function createObstacle(){
             document.createElement("div");
 
         hp.className = "hp";
-
         hp.textContent = "3";
 
-        o.appendChild(hp);
+        wood.appendChild(hp);
 
-        o.hpElement = hp;
+        wood.hpElement = hp;
     }
 
+    game.appendChild(wood);
 
-    game.appendChild(o);
-
-    obstacles.push(o);
+    woods.push(wood);
 }
 
 
-/* =========================
+/* ==============================
    BIRD
-========================= */
+============================== */
 
 function createBird(){
 
-    const b =
+    const bird =
         document.createElement("div");
 
-    b.className =
-        "bird";
+    bird.className = "bird";
+    bird.textContent = "🦅";
 
-    b.textContent =
-        "🦅";
+    bird.x =
+        window.innerWidth + 60;
 
-    b.x =
-        window.innerWidth + 50;
+    bird.y =
+        game.clientHeight * 0.82 - 105;
 
-    /* higher bird */
+    bird.style.left =
+        bird.x + "px";
 
-    b.y =
-        game.clientHeight * .82 - 105;
+    bird.style.top =
+        bird.y + "px";
 
-    b.y +=
-        Math.random() * 12 - 6;
+    game.appendChild(bird);
 
-    b.style.left =
-        b.x + "px";
-
-    b.style.top =
-        b.y + "px";
-
-    game.appendChild(b);
-
-    birds.push(b);
+    birds.push(bird);
 }
 
 
-/* =========================
-   CLEAR
-========================= */
-
-function clearAll(){
-
-    for(const o of obstacles)
-        o.remove();
-
-    for(const b of bullets)
-        b.remove();
-
-    for(const b of birds)
-        b.remove();
-
-    obstacles = [];
-    bullets = [];
-    birds = [];
-}
-
-
-/* =========================
-   STAGE
-========================= */
-
-function updateStage(){
-
-    game.className =
-        "stage" +
-        (
-            stage >= 6
-            ? 6
-            : stage
-        );
-
-
-    jumpButton.style.display =
-        (
-            stage === 1 ||
-            stage >= 4
-        )
-        ? "block"
-        : "none";
-
-
-    shootButton.style.display =
-        stage === 2
-        ? "block"
-        : "none";
-
-
-    duckButton.style.display =
-        stage === 3
-        ? "block"
-        : "none";
-
-
-    if(stage === 1){
-
-        player.textContent =
-            "🐕";
-
-        stageText.textContent =
-            "STAGE 1 - DAY";
-    }
-
-    else if(stage === 2){
-
-        player.textContent =
-            "🪖🐕";
-
-        stageText.textContent =
-            "STAGE 2 - MILITARY DAY";
-    }
-
-    else if(stage === 3){
-
-        player.textContent =
-            "🐕";
-
-        stageText.textContent =
-            "STAGE 3 - SKY DAY";
-    }
-
-    else if(stage === 4){
-
-        player.textContent =
-            "🐕";
-
-        stageText.textContent =
-            "STAGE 4 - VOLCANO";
-    }
-
-    else if(stage === 5){
-
-        player.textContent =
-            "🐕";
-
-        stageText.textContent =
-            "STAGE 5 - NIGHT";
-    }
-
-    else{
-
-        player.textContent =
-            "🐕";
-
-        stageText.textContent =
-            "STAGE " +
-            stage +
-            " - DARK ZONE";
-    }
-}
-
-
-/* =========================
-   PLAYER BOX
-========================= */
-
-function playerBox(){
-
-    const gr =
-        game.getBoundingClientRect();
-
-    const r =
-        player.getBoundingClientRect();
-
-
-    if(stage === 3){
-
-        if(ducking){
-
-            return {
-
-                left:
-                    r.left - gr.left + 25,
-
-                right:
-                    r.right - gr.left - 25,
-
-                top:
-                    r.top - gr.top + 36,
-
-                bottom:
-                    r.top - gr.top + 58
-            };
-        }
-
-
-        return {
-
-            left:
-                r.left - gr.left + 18,
-
-            right:
-                r.right - gr.left - 18,
-
-            top:
-                r.top - gr.top + 10,
-
-            bottom:
-                r.top - gr.top + 38
-        };
-    }
-
-
-    return {
-
-        left:
-            r.left - gr.left + 22,
-
-        right:
-            r.right - gr.left - 22,
-
-        top:
-            r.bottom - gr.top - 28,
-
-        bottom:
-            r.bottom - gr.top - 3
-    };
-}
-
-
-/* =========================
+/* ==============================
    COLLISION
-========================= */
+============================== */
 
-function hit(a,b){
+function collision(a,b){
 
     return(
         a.left < b.right &&
@@ -918,187 +626,263 @@ function hit(a,b){
 }
 
 
-/* =========================
-   LOOP
-========================= */
+/* ==============================
+   GAME OVER
+============================== */
 
-function loop(time){
+function lose(){
 
-    if(!running || dead)
+    if(gameOver)
         return;
 
+    gameOver = true;
+    playing = false;
+
+    over.style.display = "block";
+
+    over.innerHTML =
+        "GAME OVER<br>" +
+        "<span style='font-size:22px'>" +
+        "SCORE: " +
+        Math.floor(score) +
+        "<br><br>" +
+        "TAP TO RESTART" +
+        "</span>";
+}
+
+
+/* ==============================
+   RESTART
+============================== */
+
+game.addEventListener("click", function(){
+
+    if(gameOver){
+        location.reload();
+    }
+
+});
+
+
+/* ==============================
+   SPEED
+============================== */
+
+function getSpeed(){
+
+    if(stage <= 5){
+
+        return 5 +
+            (stage - 1) * 0.35;
+    }
+
+    return 6.4 +
+        (stage - 5) * 0.5;
+}
+
+
+/* ==============================
+   GAME LOOP
+============================== */
+
+function gameLoop(now){
+
+    if(!playing)
+        return;
 
     const dt =
         Math.min(
-            (time - lastTime) /
-            16.67,
+            (now - lastTime) / 16.67,
             2
         );
 
-    lastTime = time;
+    lastTime = now;
 
 
     /* PLAYER */
 
-    if(stage !== 3 && jumping){
+    if(stage === 3){
 
-        velocity -=
-            .75 * dt;
+        dogY = 0;
+        velocity = 0;
+        jumping = false;
 
-        y +=
-            velocity * dt;
+    }
 
-        if(y <= 0){
+    else if(jumping){
 
-            y = 0;
+        velocity -= 0.75 * dt;
+
+        dogY += velocity * dt;
+
+        if(dogY <= 0){
+
+            dogY = 0;
             velocity = 0;
             jumping = false;
         }
     }
 
 
-    if(stage === 3){
+    /* DOG MOVEMENT */
 
-        y = 0;
-        velocity = 0;
-        jumping = false;
-    }
+    if(stage === 3 && ducking){
 
-
-    if(
-        ducking &&
-        stage === 3
-    ){
-
-        player.style.transform =
+        dog.style.transform =
             "translateY(24px) scaleY(.6)";
 
-    }else{
+    }
+    else{
 
-        player.style.transform =
-            `translateY(${-y}px)`;
+        dog.style.transform =
+            "translateY(" +
+            (-dogY) +
+            "px)";
     }
 
 
     /* SCORE */
 
-    score +=
-        .025 * dt;
+    score += 0.025 * dt;
 
     scoreText.textContent =
         "SCORE: " +
         Math.floor(score);
 
 
-    /* STAGE */
+    /* STAGE CHECK */
 
     const newStage =
         Math.floor(score / 50) + 1;
-
 
     if(newStage !== stage){
 
         stage = newStage;
 
-        clearAll();
+        clearObjects();
 
-        obstacleTimer = 0;
+        woodTimer = 0;
         birdTimer = 0;
 
-        y = 0;
+        dogY = 0;
         velocity = 0;
-
         jumping = false;
         ducking = false;
-
-        player.classList.remove("duck");
 
         updateStage();
     }
 
 
-    /* OBSTACLES */
+    /* ==========================
+       WOODS
+    ========================== */
 
     if(stage !== 3){
 
-        obstacleTimer += dt;
+        woodTimer += dt;
 
-        let spawn =
+        const spawnTime =
             stage <= 5
             ? 110
             : Math.max(
                 55,
-                110 -
-                (stage - 5) * 3
+                110 - (stage - 5) * 3
             );
 
+        if(woodTimer >= spawnTime){
 
-        if(obstacleTimer >= spawn){
+            woodTimer = 0;
 
-            obstacleTimer = 0;
-
-            createObstacle();
+            createWood();
         }
 
 
-        let speed =
-            stage <= 5
-            ? 5 + (stage - 1) * .35
-            : 6.4 + (stage - 5) * .5;
+        const speed =
+            getSpeed();
 
 
-        const p =
-            playerBox();
+        const dogRect =
+            dog.getBoundingClientRect();
+
+        const gameRect =
+            game.getBoundingClientRect();
+
+
+        /* SMALL FEET HITBOX */
+
+        const playerBox = {
+
+            left:
+                dogRect.left -
+                gameRect.left +
+                22,
+
+            right:
+                dogRect.right -
+                gameRect.left -
+                22,
+
+            top:
+                dogRect.bottom -
+                gameRect.top -
+                28,
+
+            bottom:
+                dogRect.bottom -
+                gameRect.top -
+                3
+        };
 
 
         for(
-            let i=obstacles.length-1;
-            i>=0;
+            let i = woods.length - 1;
+            i >= 0;
             i--
         ){
 
-            const o =
-                obstacles[i];
+            const wood =
+                woods[i];
 
-            o.x -=
+            wood.x -=
                 speed * dt;
 
-            o.style.left =
-                o.x + "px";
+            wood.style.left =
+                wood.x + "px";
 
 
-            const ob = {
+            const woodBox = {
 
-                left:o.x + 5,
+                left:
+                    wood.x + 5,
 
-                right:o.x + 37,
+                right:
+                    wood.x + 37,
 
                 top:
-                    game.clientHeight *
-                    .82 -
-                    65,
+                    game.clientHeight * 0.82 - 65,
 
                 bottom:
-                    game.clientHeight *
-                    .82
+                    game.clientHeight * 0.82
             };
 
 
             if(
-                hit(p,ob)
+                collision(
+                    playerBox,
+                    woodBox
+                )
             ){
 
-                endGame();
-
+                lose();
                 return;
             }
 
 
-            if(o.x < -80){
+            if(wood.x < -80){
 
-                o.remove();
+                wood.remove();
 
-                obstacles.splice(i,1);
+                woods.splice(i,1);
 
                 score += 5;
             }
@@ -1106,56 +890,65 @@ function loop(time){
     }
 
 
-    /* BULLETS */
+    /* ==========================
+       BULLETS
+    ========================== */
 
     for(
-        let i=bullets.length-1;
-        i>=0;
+        let i = bullets.length - 1;
+        i >= 0;
         i--
     ){
 
-        const b =
+        const bullet =
             bullets[i];
 
-        b.x +=
+        bullet.x +=
             12 * dt;
 
-        b.style.left =
-            b.x + "px";
+        bullet.style.left =
+            bullet.x + "px";
+
+
+        let destroyed =
+            false;
 
 
         for(
-            let j=obstacles.length-1;
-            j>=0;
+            let j = woods.length - 1;
+            j >= 0;
             j--
         ){
 
-            const o =
-                obstacles[j];
+            const wood =
+                woods[j];
 
 
             if(
-                b.x + 16 > o.x &&
-                b.x < o.x + 42
+                bullet.x + 17 > wood.x &&
+                bullet.x < wood.x + 42
             ){
 
-                o.hp--;
+                wood.hp--;
 
-                if(o.hpElement)
-                    o.hpElement.textContent =
-                        o.hp;
+                if(wood.hpElement){
 
+                    wood.hpElement.textContent =
+                        wood.hp;
+                }
 
-                b.remove();
+                bullet.remove();
 
                 bullets.splice(i,1);
 
+                destroyed = true;
 
-                if(o.hp <= 0){
 
-                    o.remove();
+                if(wood.hp <= 0){
 
-                    obstacles.splice(j,1);
+                    wood.remove();
+
+                    woods.splice(j,1);
 
                     score += 3;
                 }
@@ -1165,24 +958,22 @@ function loop(time){
         }
 
 
-        if(
-            i < bullets.length &&
-            b.x > window.innerWidth
-        ){
+        if(!destroyed && bullet.x > window.innerWidth + 50){
 
-            b.remove();
+            bullet.remove();
 
             bullets.splice(i,1);
         }
     }
 
 
-    /* BIRDS */
+    /* ==========================
+       BIRDS
+    ========================== */
 
     if(stage === 3){
 
         birdTimer += dt;
-
 
         if(birdTimer >= 90){
 
@@ -1192,46 +983,117 @@ function loop(time){
         }
 
 
-        const p =
-            playerBox();
+        const dogRect =
+            dog.getBoundingClientRect();
+
+        const gameRect =
+            game.getBoundingClientRect();
+
+
+        let head;
+
+
+        if(ducking){
+
+            head = {
+
+                left:
+                    dogRect.left -
+                    gameRect.left +
+                    25,
+
+                right:
+                    dogRect.right -
+                    gameRect.left -
+                    25,
+
+                top:
+                    dogRect.top -
+                    gameRect.top +
+                    36,
+
+                bottom:
+                    dogRect.top -
+                    gameRect.top +
+                    58
+            };
+
+        }
+
+        else{
+
+            head = {
+
+                left:
+                    dogRect.left -
+                    gameRect.left +
+                    18,
+
+                right:
+                    dogRect.right -
+                    gameRect.left -
+                    18,
+
+                top:
+                    dogRect.top -
+                    gameRect.top +
+                    10,
+
+                bottom:
+                    dogRect.top -
+                    gameRect.top +
+                    38
+            };
+        }
 
 
         for(
-            let i=birds.length-1;
-            i>=0;
+            let i = birds.length - 1;
+            i >= 0;
             i--
         ){
 
-            const b =
+            const bird =
                 birds[i];
 
-            b.x -=
+            bird.x -=
                 6 * dt;
 
-            b.style.left =
-                b.x + "px";
+            bird.style.left =
+                bird.x + "px";
 
 
-            const bb = {
+            const birdBox = {
 
-                left:b.x + 10,
-                right:b.x + 43,
-                top:b.y + 10,
-                bottom:b.y + 34
+                left:
+                    bird.x + 10,
+
+                right:
+                    bird.x + 43,
+
+                top:
+                    bird.y + 10,
+
+                bottom:
+                    bird.y + 34
             };
 
 
-            if(hit(p,bb)){
+            if(
+                collision(
+                    head,
+                    birdBox
+                )
+            ){
 
-                endGame();
-
+                lose();
                 return;
             }
 
 
-            if(b.x < -80){
+            if(bird.x < -80){
 
-                b.remove();
+                bird.remove();
 
                 birds.splice(i,1);
 
@@ -1241,57 +1103,23 @@ function loop(time){
     }
 
 
-    requestAnimationFrame(loop);
+    requestAnimationFrame(gameLoop);
 }
 
 
-/* =========================
-   GAME OVER
-========================= */
-
-function endGame(){
-
-    if(dead)
-        return;
-
-    dead = true;
-    running = false;
-
-    gameOverText.innerHTML =
-        "GAME OVER<br>" +
-        "<span style='font-size:22px'>" +
-        "SCORE: " +
-        Math.floor(score) +
-        "<br><br>TAP TO RESTART" +
-        "</span>";
-
-    gameOverText.style.display =
-        "block";
-}
-
-
-/* =========================
-   RESTART
-========================= */
-
-game.addEventListener(
-    "pointerdown",
-    function(){
-
-        if(dead){
-
-            start();
-        }
-    }
-);
-
-
-/* =========================
-   START IMMEDIATELY
-========================= */
+/* ==============================
+   START GAME IMMEDIATELY
+============================== */
 
 updateStage();
-start();
+
+requestAnimationFrame(function(time){
+
+    lastTime = time;
+
+    gameLoop(time);
+
+});
 
 </script>
 
