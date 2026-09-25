@@ -34,8 +34,6 @@ html,body{
     );
 }
 
-/* MAPS */
-
 #game.s2{
     background:linear-gradient(
         #92999d 0%,
@@ -78,8 +76,6 @@ html,body{
     );
 }
 
-/* GROUND */
-
 #ground{
     position:absolute;
     left:0;
@@ -106,8 +102,6 @@ html,body{
     background:#080a12;
 }
 
-/* SCORE */
-
 #score{
     position:absolute;
     top:15px;
@@ -130,8 +124,6 @@ html,body{
     text-shadow:2px 2px 4px #000;
 }
 
-/* DOG */
-
 #dog{
     position:absolute;
     left:10%;
@@ -145,8 +137,6 @@ html,body{
     transform-origin:center bottom;
 }
 
-/* BUTTONS */
-
 .btn{
     position:absolute;
     right:25px;
@@ -159,7 +149,11 @@ html,body{
     font-size:21px;
     font-weight:bold;
     z-index:100;
+
+    /* IMPORTANT FOR PHONE */
     touch-action:none;
+    -webkit-tap-highlight-color:transparent;
+    cursor:pointer;
 }
 
 #jump{
@@ -175,8 +169,6 @@ html,body{
     background:#9333ea;
     display:none;
 }
-
-/* WOOD */
 
 .wood{
     position:absolute;
@@ -222,8 +214,6 @@ html,body{
     text-shadow:2px 2px 3px #000;
 }
 
-/* BULLET */
-
 .bullet{
     position:absolute;
     width:17px;
@@ -233,8 +223,6 @@ html,body{
     z-index:30;
 }
 
-/* BIRD */
-
 .bird{
     position:absolute;
     width:55px;
@@ -242,8 +230,6 @@ html,body{
     font-size:38px;
     z-index:15;
 }
-
-/* GAME OVER */
 
 #over{
     position:absolute;
@@ -282,10 +268,6 @@ html,body{
 </div>
 
 <script>
-
-/* ==============================
-   GAME
-============================== */
 
 const game = document.getElementById("game");
 const dog = document.getElementById("dog");
@@ -329,65 +311,50 @@ function updateStage(){
     if(stage === 1){
 
         game.classList.add("stage1");
-
-        stageText.textContent =
-            "STAGE 1 - DAY";
-
+        stageText.textContent = "STAGE 1 - DAY";
         dog.textContent = "🐕";
+
     }
 
     else if(stage === 2){
 
         game.classList.add("s2");
-
-        stageText.textContent =
-            "STAGE 2 - MILITARY DAY";
-
+        stageText.textContent = "STAGE 2 - MILITARY DAY";
         dog.textContent = "🪖🐕";
+
     }
 
     else if(stage === 3){
 
         game.classList.add("s3");
-
-        stageText.textContent =
-            "STAGE 3 - SKY DAY";
-
+        stageText.textContent = "STAGE 3 - SKY DAY";
         dog.textContent = "🐕";
+
     }
 
     else if(stage === 4){
 
         game.classList.add("s4");
-
-        stageText.textContent =
-            "STAGE 4 - VOLCANO";
-
+        stageText.textContent = "STAGE 4 - VOLCANO";
         dog.textContent = "🐕";
+
     }
 
     else if(stage === 5){
 
         game.classList.add("s5");
-
-        stageText.textContent =
-            "STAGE 5 - NIGHT";
-
+        stageText.textContent = "STAGE 5 - NIGHT";
         dog.textContent = "🐕";
+
     }
 
     else{
 
         game.classList.add("s6");
-
         stageText.textContent =
             "STAGE " + stage + " - DARK ZONE";
-
         dog.textContent = "🐕";
     }
-
-
-    /* BUTTONS */
 
     jumpButton.style.display =
         (stage === 1 || stage >= 4)
@@ -407,7 +374,7 @@ function updateStage(){
 
 
 /* ==============================
-   CLEAR OLD OBJECTS
+   CLEAR
 ============================== */
 
 function clearObjects(){
@@ -441,20 +408,46 @@ function jump(){
     velocity = 13;
 }
 
-jumpButton.addEventListener("click", jump);
+
+/* ==============================
+   FAST JUMP FOR PHONE
+============================== */
+
+jumpButton.addEventListener("pointerdown", function(e){
+
+    e.preventDefault();
+
+    jump();
+
+});
+
+
+/* ==============================
+   KEYBOARD
+============================== */
 
 document.addEventListener("keydown", function(e){
 
-    if(e.code === "Space" || e.code === "ArrowUp"){
+    if(
+        e.code === "Space" ||
+        e.code === "ArrowUp"
+    ){
+
         e.preventDefault();
+
         jump();
     }
 
-    if(e.code === "ArrowDown" && stage === 3){
+    if(
+        e.code === "ArrowDown" &&
+        stage === 3
+    ){
+
         ducking = true;
     }
 
     if(e.code === "KeyX"){
+
         shoot();
     }
 });
@@ -462,6 +455,7 @@ document.addEventListener("keydown", function(e){
 document.addEventListener("keyup", function(e){
 
     if(e.code === "ArrowDown"){
+
         ducking = false;
     }
 });
@@ -475,22 +469,23 @@ duckButton.addEventListener("pointerdown", function(e){
 
     e.preventDefault();
 
-    if(stage === 3 && playing && !gameOver){
+    if(
+        stage === 3 &&
+        playing &&
+        !gameOver
+    ){
+
         ducking = true;
     }
 });
 
-duckButton.addEventListener("pointerup", function(e){
+duckButton.addEventListener("pointerup", function(){
 
-    e.preventDefault();
     ducking = false;
 });
 
 duckButton.addEventListener("pointercancel", function(){
-    ducking = false;
-});
 
-duckButton.addEventListener("pointerleave", function(){
     ducking = false;
 });
 
@@ -506,6 +501,7 @@ function shoot(){
         gameOver ||
         stage !== 2
     ){
+
         return;
     }
 
@@ -540,11 +536,20 @@ function shoot(){
     bullets.push(bullet);
 }
 
-shootButton.addEventListener("click", shoot);
+
+/* FAST SHOOT */
+
+shootButton.addEventListener("pointerdown", function(e){
+
+    e.preventDefault();
+
+    shoot();
+
+});
 
 
 /* ==============================
-   WOOD
+   CREATE WOOD
 ============================== */
 
 function createWood(){
@@ -582,7 +587,7 @@ function createWood(){
 
 
 /* ==============================
-   BIRD
+   CREATE BIRD
 ============================== */
 
 function createBird(){
@@ -658,6 +663,7 @@ function lose(){
 game.addEventListener("click", function(){
 
     if(gameOver){
+
         location.reload();
     }
 
@@ -724,7 +730,7 @@ function gameLoop(now){
     }
 
 
-    /* DOG MOVEMENT */
+    /* DOG */
 
     if(stage === 3 && ducking){
 
@@ -750,7 +756,7 @@ function gameLoop(now){
         Math.floor(score);
 
 
-    /* STAGE CHECK */
+    /* STAGE */
 
     const newStage =
         Math.floor(score / 50) + 1;
@@ -797,9 +803,7 @@ function gameLoop(now){
         }
 
 
-        const speed =
-            getSpeed();
-
+        const speed = getSpeed();
 
         const dogRect =
             dog.getBoundingClientRect();
@@ -807,8 +811,6 @@ function gameLoop(now){
         const gameRect =
             game.getBoundingClientRect();
 
-
-        /* SMALL FEET HITBOX */
 
         const playerBox = {
 
@@ -910,10 +912,6 @@ function gameLoop(now){
             bullet.x + "px";
 
 
-        let destroyed =
-            false;
-
-
         for(
             let j = woods.length - 1;
             j >= 0;
@@ -922,7 +920,6 @@ function gameLoop(now){
 
             const wood =
                 woods[j];
-
 
             if(
                 bullet.x + 17 > wood.x &&
@@ -941,8 +938,6 @@ function gameLoop(now){
 
                 bullets.splice(i,1);
 
-                destroyed = true;
-
 
                 if(wood.hp <= 0){
 
@@ -958,11 +953,14 @@ function gameLoop(now){
         }
 
 
-        if(!destroyed && bullet.x > window.innerWidth + 50){
+        if(bullet.x > window.innerWidth + 50){
 
-            bullet.remove();
+            if(bullets.includes(bullet)){
 
-            bullets.splice(i,1);
+                bullet.remove();
+
+                bullets.splice(i,1);
+            }
         }
     }
 
@@ -1019,7 +1017,6 @@ function gameLoop(now){
             };
 
         }
-
         else{
 
             head = {
@@ -1108,7 +1105,7 @@ function gameLoop(now){
 
 
 /* ==============================
-   START GAME IMMEDIATELY
+   START
 ============================== */
 
 updateStage();
