@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Dog Runner</title>
 
 <style>
@@ -18,6 +20,7 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
+    background:#58c5ff;
     font-family:Arial,sans-serif;
 }
 
@@ -26,29 +29,35 @@ html,body{
     width:100vw;
     height:100vh;
     overflow:hidden;
+    background:linear-gradient(
+        #58c5ff 0%,
+        #c8efff 58%,
+        #70c653 58%,
+        #369530 100%
+    );
 }
 
 /* MAPS */
 
-.stage1{
+#game.stage1{
     background:linear-gradient(
-        #55c6ff 0%,
-        #c9f0ff 58%,
-        #71c653 58%,
-        #369532 100%
+        #58c5ff 0%,
+        #c8efff 58%,
+        #70c653 58%,
+        #369530 100%
     );
 }
 
-.stage2{
+#game.stage2{
     background:linear-gradient(
-        #899398 0%,
-        #c9cdcf 55%,
+        #8b959a 0%,
+        #c7cbcd 55%,
         #606568 55%,
         #303336 100%
     );
 }
 
-.stage3{
+#game.stage3{
     background:linear-gradient(
         #20adf5 0%,
         #8cdeff 65%,
@@ -56,7 +65,7 @@ html,body{
     );
 }
 
-.stage4{
+#game.stage4{
     background:linear-gradient(
         #ffae50 0%,
         #e65d32 50%,
@@ -65,7 +74,7 @@ html,body{
     );
 }
 
-.stage5{
+#game.stage5{
     background:linear-gradient(
         #11172b 0%,
         #202945 55%,
@@ -73,7 +82,7 @@ html,body{
     );
 }
 
-.stage6{
+#game.stage6{
     background:linear-gradient(
         #070918 0%,
         #181c38 55%,
@@ -98,7 +107,7 @@ html,body{
 }
 
 .stage3 #ground{
-    background:rgba(255,255,255,.3);
+    background:rgba(255,255,255,.25);
 }
 
 .stage4 #ground{
@@ -114,41 +123,24 @@ html,body{
 
 #score{
     position:absolute;
-    top:14px;
+    top:15px;
     left:15px;
     z-index:100;
     color:white;
     font-size:24px;
     font-weight:bold;
-    text-shadow:2px 2px 4px #000;
+    text-shadow:2px 2px 4px black;
 }
 
-#stageText{
+#stage{
     position:absolute;
-    top:47px;
+    top:48px;
     left:15px;
     z-index:100;
     color:white;
-    font-size:19px;
+    font-size:18px;
     font-weight:bold;
-    text-shadow:2px 2px 4px #000;
-}
-
-/* STAGE MESSAGE */
-
-#message{
-    position:absolute;
-    top:43%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    z-index:200;
-    color:white;
-    font-size:43px;
-    font-weight:bold;
-    text-align:center;
-    text-shadow:3px 3px 7px #000;
-    pointer-events:none;
-    display:none;
+    text-shadow:2px 2px 4px black;
 }
 
 /* PLAYER */
@@ -160,16 +152,18 @@ html,body{
     width:70px;
     height:70px;
     z-index:20;
-    font-size:52px;
+
+    font-size:50px;
     line-height:70px;
     text-align:center;
+
     transform:translateY(0);
 }
 
 #player.duck{
     transform:
         translateY(24px)
-        scaleY(.60);
+        scaleY(.6);
 }
 
 /* BUTTONS */
@@ -178,90 +172,112 @@ html,body{
     position:absolute;
     right:25px;
     bottom:25px;
+
     width:125px;
     height:65px;
-    z-index:150;
-    border:none;
+
+    border:0;
     border-radius:15px;
+
     color:white;
-    font-size:22px;
+    font-size:21px;
     font-weight:bold;
-    box-shadow:0 5px 0 rgba(0,0,0,.35);
+
+    z-index:100;
+
     touch-action:none;
 }
 
-#jumpButton{
+#jump{
     background:#2563eb;
 }
 
-#shootButton{
+#shoot{
     background:#dc2626;
     display:none;
 }
 
-#duckButton{
+#duck{
     background:#9333ea;
     display:none;
-}
-
-.control:active{
-    transform:translateY(4px);
 }
 
 /* WOOD */
 
 .obstacle{
     position:absolute;
+
     width:42px;
     height:65px;
+
     bottom:18%;
+
     background:#8b4513;
     border:4px solid #5b2c0c;
+
     border-radius:4px;
+
     z-index:10;
 }
 
-.obstacle::before{
+.obstacle:before{
     content:"";
     position:absolute;
+
     left:4px;
     top:12px;
+
     width:26px;
     height:5px;
+
     background:#c27a3c;
+
     transform:rotate(-10deg);
 }
 
-.obstacle::after{
+.obstacle:after{
     content:"";
     position:absolute;
+
     left:5px;
     top:35px;
+
     width:25px;
     height:5px;
+
     background:#c27a3c;
+
     transform:rotate(8deg);
 }
 
-.hpText{
+/* HP */
+
+.hp{
     position:absolute;
     top:-25px;
     left:50%;
+
     transform:translateX(-50%);
+
     color:white;
     font-size:18px;
     font-weight:bold;
-    text-shadow:2px 2px 3px #000;
+
+    text-shadow:2px 2px 3px black;
 }
 
 /* BULLET */
 
 .bullet{
     position:absolute;
+
     width:16px;
     height:6px;
+
     background:#ffd000;
+
     border-radius:5px;
+
     z-index:30;
 }
 
@@ -269,10 +285,39 @@ html,body{
 
 .bird{
     position:absolute;
+
     width:55px;
     height:45px;
-    font-size:42px;
+
+    font-size:40px;
+
     z-index:15;
+}
+
+/* GAME OVER */
+
+#gameOver{
+    position:absolute;
+
+    top:40%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:300;
+
+    color:white;
+
+    font-size:42px;
+    font-weight:bold;
+
+    text-align:center;
+
+    text-shadow:3px 3px 7px black;
+
+    display:none;
+
+    pointer-events:none;
 }
 
 </style>
@@ -280,33 +325,31 @@ html,body{
 
 <body>
 
-<div id="game" class="stage1">
+<div id="game">
 
-    <div id="score">
-        SCORE: 0
-    </div>
+    <div id="score">SCORE: 0</div>
 
-    <div id="stageText">
+    <div id="stage">
         STAGE 1 - DAY
     </div>
 
-    <div id="message"></div>
-
-    <div id="player">
-        🐕
+    <div id="gameOver">
+        GAME OVER
     </div>
+
+    <div id="player">🐕</div>
 
     <div id="ground"></div>
 
-    <button id="jumpButton" class="control">
+    <button id="jump" class="control">
         JUMP
     </button>
 
-    <button id="shootButton" class="control">
+    <button id="shoot" class="control">
         SHOOT
     </button>
 
-    <button id="duckButton" class="control">
+    <button id="duck" class="control">
         DUCK
     </button>
 
@@ -314,7 +357,9 @@ html,body{
 
 <script>
 
-/* ================= ELEMENTS ================= */
+/* =========================
+   ELEMENTS
+========================= */
 
 const game =
     document.getElementById("game");
@@ -326,34 +371,33 @@ const scoreText =
     document.getElementById("score");
 
 const stageText =
-    document.getElementById("stageText");
+    document.getElementById("stage");
 
-const message =
-    document.getElementById("message");
+const gameOverText =
+    document.getElementById("gameOver");
 
 const jumpButton =
-    document.getElementById("jumpButton");
+    document.getElementById("jump");
 
 const shootButton =
-    document.getElementById("shootButton");
+    document.getElementById("shoot");
 
 const duckButton =
-    document.getElementById("duckButton");
+    document.getElementById("duck");
 
 
-/* ================= VARIABLES ================= */
+/* =========================
+   GAME VARIABLES
+========================= */
 
-let gameStarted = false;
-let gameOver = false;
+let running = true;
+let dead = false;
 
 let score = 0;
 let stage = 1;
 
-let playerY = 0;
-let velocityY = 0;
-
-const gravity = 0.75;
-const jumpPower = 13;
+let y = 0;
+let velocity = 0;
 
 let jumping = false;
 let ducking = false;
@@ -365,24 +409,23 @@ let birds = [];
 let obstacleTimer = 0;
 let birdTimer = 0;
 
-let lastTime = 0;
+let lastTime = performance.now();
 
 
-/* ================= START ================= */
+/* =========================
+   START
+========================= */
 
-function startGame(){
+function start(){
 
-    if(gameStarted)
-        return;
-
-    gameStarted = true;
-    gameOver = false;
+    running = true;
+    dead = false;
 
     score = 0;
     stage = 1;
 
-    playerY = 0;
-    velocityY = 0;
+    y = 0;
+    velocity = 0;
 
     jumping = false;
     ducking = false;
@@ -390,29 +433,31 @@ function startGame(){
     obstacleTimer = 0;
     birdTimer = 0;
 
-    clearObjects();
+    clearAll();
+
+    gameOverText.style.display = "none";
 
     player.textContent = "🐕";
-    player.classList.remove("duck");
-    player.style.transform = "translateY(0)";
 
-    scoreText.textContent = "SCORE: 0";
-
-    message.style.display = "none";
+    player.style.transform =
+        "translateY(0)";
 
     updateStage();
 
-    lastTime = performance.now();
+    lastTime =
+        performance.now();
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(loop);
 }
 
 
-/* ================= JUMP ================= */
+/* =========================
+   JUMP
+========================= */
 
 function jump(){
 
-    if(!gameStarted || gameOver)
+    if(!running || dead)
         return;
 
     if(stage === 3)
@@ -422,8 +467,10 @@ function jump(){
         return;
 
     jumping = true;
-    velocityY = jumpPower;
+
+    velocity = 13;
 }
+
 
 jumpButton.addEventListener(
     "pointerdown",
@@ -436,133 +483,36 @@ jumpButton.addEventListener(
 );
 
 
-/* ================= KEYBOARD ================= */
-
-document.addEventListener(
-    "keydown",
-    function(e){
-
-        if(
-            e.code === "Space" ||
-            e.code === "ArrowUp"
-        ){
-
-            e.preventDefault();
-
-            jump();
-        }
-
-        if(
-            e.code === "ArrowDown" &&
-            stage === 3
-        ){
-
-            startDuck(e);
-        }
-
-        if(e.code === "KeyX"){
-
-            shoot();
-        }
-    }
-);
-
-
-document.addEventListener(
-    "keyup",
-    function(e){
-
-        if(e.code === "ArrowDown"){
-
-            stopDuck(e);
-        }
-    }
-);
-
-
-/* ================= DUCK ================= */
-
-function startDuck(e){
-
-    if(e)
-        e.preventDefault();
-
-    if(
-        !gameStarted ||
-        gameOver ||
-        stage !== 3
-    )
-        return;
-
-    ducking = true;
-
-    player.classList.add("duck");
-}
-
-function stopDuck(e){
-
-    if(e)
-        e.preventDefault();
-
-    ducking = false;
-
-    player.classList.remove("duck");
-}
-
-
-/* Phone DUCK */
-
-duckButton.addEventListener(
-    "pointerdown",
-    startDuck
-);
-
-duckButton.addEventListener(
-    "pointerup",
-    stopDuck
-);
-
-duckButton.addEventListener(
-    "pointercancel",
-    stopDuck
-);
-
-duckButton.addEventListener(
-    "pointerleave",
-    stopDuck
-);
-
-
-/* ================= SHOOT ================= */
+/* =========================
+   SHOOT
+========================= */
 
 function shoot(){
 
     if(
-        !gameStarted ||
-        gameOver ||
+        !running ||
+        dead ||
         stage !== 2
     )
         return;
 
-    const rect =
+    const r =
         player.getBoundingClientRect();
 
-    const gameRect =
+    const g =
         game.getBoundingClientRect();
 
     const bullet =
         document.createElement("div");
 
-    bullet.className = "bullet";
+    bullet.className =
+        "bullet";
 
     bullet.x =
-        rect.right -
-        gameRect.left;
+        r.right - g.left;
 
     bullet.y =
-        rect.top -
-        gameRect.top +
-        30;
+        r.top - g.top + 30;
 
     bullet.style.left =
         bullet.x + "px";
@@ -587,23 +537,128 @@ shootButton.addEventListener(
 );
 
 
-/* ================= OBSTACLE ================= */
+/* =========================
+   DUCK
+========================= */
+
+function duckStart(e){
+
+    if(e)
+        e.preventDefault();
+
+    if(
+        !running ||
+        dead ||
+        stage !== 3
+    )
+        return;
+
+    ducking = true;
+
+    player.classList.add("duck");
+}
+
+
+function duckStop(e){
+
+    if(e)
+        e.preventDefault();
+
+    ducking = false;
+
+    player.classList.remove("duck");
+}
+
+
+duckButton.addEventListener(
+    "pointerdown",
+    duckStart
+);
+
+duckButton.addEventListener(
+    "pointerup",
+    duckStop
+);
+
+duckButton.addEventListener(
+    "pointercancel",
+    duckStop
+);
+
+duckButton.addEventListener(
+    "pointerleave",
+    duckStop
+);
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(
+            e.code === "Space" ||
+            e.code === "ArrowUp"
+        ){
+
+            e.preventDefault();
+
+            jump();
+        }
+
+        if(
+            e.code === "ArrowDown"
+        ){
+
+            duckStart(e);
+        }
+
+        if(
+            e.code === "KeyX"
+        ){
+
+            shoot();
+        }
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    function(e){
+
+        if(
+            e.code === "ArrowDown"
+        ){
+
+            duckStop(e);
+        }
+    }
+);
+
+
+/* =========================
+   OBSTACLE
+========================= */
 
 function createObstacle(){
 
-    const obstacle =
+    const o =
         document.createElement("div");
 
-    obstacle.className =
+    o.className =
         "obstacle";
 
-    obstacle.x =
-        window.innerWidth + 30;
+    o.x =
+        window.innerWidth + 20;
 
-    obstacle.hp = 3;
+    o.hp = 3;
 
-    obstacle.style.left =
-        obstacle.x + "px";
+    o.style.left =
+        o.x + "px";
 
 
     if(stage === 2){
@@ -611,72 +666,74 @@ function createObstacle(){
         const hp =
             document.createElement("div");
 
-        hp.className =
-            "hpText";
+        hp.className = "hp";
 
         hp.textContent = "3";
 
-        obstacle.appendChild(hp);
+        o.appendChild(hp);
 
-        obstacle.hpText = hp;
+        o.hpElement = hp;
     }
 
 
-    game.appendChild(obstacle);
+    game.appendChild(o);
 
-    obstacles.push(obstacle);
+    obstacles.push(o);
 }
 
 
-/* ================= BIRD ================= */
+/* =========================
+   BIRD
+========================= */
 
 function createBird(){
 
-    const bird =
+    const b =
         document.createElement("div");
 
-    bird.className = "bird";
+    b.className =
+        "bird";
 
-    bird.textContent = "🦅";
+    b.textContent =
+        "🦅";
 
-    bird.x =
-        window.innerWidth + 60;
+    b.x =
+        window.innerWidth + 50;
 
-    /* Bird raised higher */
+    /* higher bird */
 
-    bird.y =
-        game.clientHeight * 0.82 - 105;
+    b.y =
+        game.clientHeight * .82 - 105;
 
-    bird.y +=
-        Math.random() * 15 - 7;
+    b.y +=
+        Math.random() * 12 - 6;
 
-    bird.style.left =
-        bird.x + "px";
+    b.style.left =
+        b.x + "px";
 
-    bird.style.top =
-        bird.y + "px";
+    b.style.top =
+        b.y + "px";
 
-    game.appendChild(bird);
+    game.appendChild(b);
 
-    birds.push(bird);
+    birds.push(b);
 }
 
 
-/* ================= CLEAR ================= */
+/* =========================
+   CLEAR
+========================= */
 
-function clearObjects(){
+function clearAll(){
 
-    obstacles.forEach(
-        o => o.remove()
-    );
+    for(const o of obstacles)
+        o.remove();
 
-    bullets.forEach(
-        b => b.remove()
-    );
+    for(const b of bullets)
+        b.remove();
 
-    birds.forEach(
-        b => b.remove()
-    );
+    for(const b of birds)
+        b.remove();
 
     obstacles = [];
     bullets = [];
@@ -684,17 +741,46 @@ function clearObjects(){
 }
 
 
-/* ================= STAGE ================= */
+/* =========================
+   STAGE
+========================= */
 
 function updateStage(){
 
-    updateMap();
-    updateControls();
+    game.className =
+        "stage" +
+        (
+            stage >= 6
+            ? 6
+            : stage
+        );
+
+
+    jumpButton.style.display =
+        (
+            stage === 1 ||
+            stage >= 4
+        )
+        ? "block"
+        : "none";
+
+
+    shootButton.style.display =
+        stage === 2
+        ? "block"
+        : "none";
+
+
+    duckButton.style.display =
+        stage === 3
+        ? "block"
+        : "none";
 
 
     if(stage === 1){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 1 - DAY";
@@ -711,7 +797,8 @@ function updateStage(){
 
     else if(stage === 3){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 3 - SKY DAY";
@@ -719,7 +806,8 @@ function updateStage(){
 
     else if(stage === 4){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 4 - VOLCANO";
@@ -727,7 +815,8 @@ function updateStage(){
 
     else if(stage === 5){
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE 5 - NIGHT";
@@ -735,7 +824,8 @@ function updateStage(){
 
     else{
 
-        player.textContent = "🐕";
+        player.textContent =
+            "🐕";
 
         stageText.textContent =
             "STAGE " +
@@ -745,68 +835,18 @@ function updateStage(){
 }
 
 
-/* ================= MAP ================= */
+/* =========================
+   PLAYER BOX
+========================= */
 
-function updateMap(){
+function playerBox(){
 
-    game.className = "";
-
-    if(stage === 1)
-        game.classList.add("stage1");
-
-    else if(stage === 2)
-        game.classList.add("stage2");
-
-    else if(stage === 3)
-        game.classList.add("stage3");
-
-    else if(stage === 4)
-        game.classList.add("stage4");
-
-    else if(stage === 5)
-        game.classList.add("stage5");
-
-    else
-        game.classList.add("stage6");
-}
-
-
-/* ================= CONTROLS ================= */
-
-function updateControls(){
-
-    jumpButton.style.display =
-        (
-            stage === 1 ||
-            stage >= 4
-        )
-        ? "block"
-        : "none";
-
-    shootButton.style.display =
-        stage === 2
-        ? "block"
-        : "none";
-
-    duckButton.style.display =
-        stage === 3
-        ? "block"
-        : "none";
-}
-
-
-/* ================= PLAYER BOX ================= */
-
-function getPlayerBox(){
-
-    const gameRect =
+    const gr =
         game.getBoundingClientRect();
 
-    const rect =
+    const r =
         player.getBoundingClientRect();
 
-
-    /* STAGE 3 = HEAD */
 
     if(stage === 3){
 
@@ -815,20 +855,16 @@ function getPlayerBox(){
             return {
 
                 left:
-                    rect.left -
-                    gameRect.left + 25,
+                    r.left - gr.left + 25,
 
                 right:
-                    rect.right -
-                    gameRect.left - 25,
+                    r.right - gr.left - 25,
 
                 top:
-                    rect.top -
-                    gameRect.top + 36,
+                    r.top - gr.top + 36,
 
                 bottom:
-                    rect.top -
-                    gameRect.top + 58
+                    r.top - gr.top + 58
             };
         }
 
@@ -836,50 +872,42 @@ function getPlayerBox(){
         return {
 
             left:
-                rect.left -
-                gameRect.left + 18,
+                r.left - gr.left + 18,
 
             right:
-                rect.right -
-                gameRect.left - 18,
+                r.right - gr.left - 18,
 
             top:
-                rect.top -
-                gameRect.top + 10,
+                r.top - gr.top + 10,
 
             bottom:
-                rect.top -
-                gameRect.top + 38
+                r.top - gr.top + 38
         };
     }
 
 
-    /* OTHER STAGES = FEET */
-
     return {
 
         left:
-            rect.left -
-            gameRect.left + 22,
+            r.left - gr.left + 22,
 
         right:
-            rect.right -
-            gameRect.left - 22,
+            r.right - gr.left - 22,
 
         top:
-            rect.bottom -
-            gameRect.top - 28,
+            r.bottom - gr.top - 28,
 
         bottom:
-            rect.bottom -
-            gameRect.top - 3
+            r.bottom - gr.top - 3
     };
 }
 
 
-/* ================= COLLISION ================= */
+/* =========================
+   COLLISION
+========================= */
 
-function collision(a,b){
+function hit(a,b){
 
     return(
         a.left < b.right &&
@@ -890,78 +918,17 @@ function collision(a,b){
 }
 
 
-/* ================= OBSTACLE BOX ================= */
+/* =========================
+   LOOP
+========================= */
 
-function getObstacleBox(o){
+function loop(time){
 
-    const gameRect =
-        game.getBoundingClientRect();
-
-    const rect =
-        o.getBoundingClientRect();
-
-    return {
-
-        left:
-            rect.left -
-            gameRect.left + 5,
-
-        right:
-            rect.right -
-            gameRect.left - 5,
-
-        top:
-            rect.top -
-            gameRect.top + 3,
-
-        bottom:
-            rect.bottom -
-            gameRect.top - 3
-    };
-}
-
-
-/* ================= BIRD BOX ================= */
-
-function getBirdBox(b){
-
-    return {
-
-        left: b.x + 10,
-        right: b.x + 43,
-        top: b.y + 10,
-        bottom: b.y + 34
-    };
-}
-
-
-/* ================= SPEED ================= */
-
-function getGameSpeed(){
-
-    if(stage <= 5){
-
-        return 5 +
-            (stage - 1) * 0.35;
-    }
-
-    return 6.4 +
-        (stage - 5) * 0.5;
-}
-
-
-/* ================= LOOP ================= */
-
-function gameLoop(time){
-
-    if(
-        !gameStarted ||
-        gameOver
-    )
+    if(!running || dead)
         return;
 
 
-    const delta =
+    const dt =
         Math.min(
             (time - lastTime) /
             16.67,
@@ -971,50 +938,30 @@ function gameLoop(time){
     lastTime = time;
 
 
-    updatePlayer(delta);
+    /* PLAYER */
 
-    updateScore(delta);
+    if(stage !== 3 && jumping){
 
-    updateStageIfNeeded();
+        velocity -=
+            .75 * dt;
 
-    updateObstacles(delta);
+        y +=
+            velocity * dt;
 
-    updateBullets(delta);
+        if(y <= 0){
 
-    updateBirds(delta);
+            y = 0;
+            velocity = 0;
+            jumping = false;
+        }
+    }
 
-
-    requestAnimationFrame(
-        gameLoop
-    );
-}
-
-
-/* ================= PLAYER ================= */
-
-function updatePlayer(delta){
 
     if(stage === 3){
 
-        playerY = 0;
-        velocityY = 0;
+        y = 0;
+        velocity = 0;
         jumping = false;
-
-    }else if(jumping){
-
-        velocityY -=
-            gravity * delta;
-
-        playerY +=
-            velocityY * delta;
-
-
-        if(playerY <= 0){
-
-            playerY = 0;
-            velocityY = 0;
-            jumping = false;
-        }
     }
 
 
@@ -1024,32 +971,26 @@ function updatePlayer(delta){
     ){
 
         player.style.transform =
-            "translateY(24px) scaleY(.60)";
+            "translateY(24px) scaleY(.6)";
 
     }else{
 
         player.style.transform =
-            `translateY(${-playerY}px)`;
+            `translateY(${-y}px)`;
     }
-}
 
 
-/* ================= SCORE ================= */
-
-function updateScore(delta){
+    /* SCORE */
 
     score +=
-        0.025 * delta;
+        .025 * dt;
 
     scoreText.textContent =
         "SCORE: " +
         Math.floor(score);
-}
 
 
-/* ================= STAGE CHANGE ================= */
-
-function updateStageIfNeeded(){
+    /* STAGE */
 
     const newStage =
         Math.floor(score / 50) + 1;
@@ -1059,154 +1000,117 @@ function updateStageIfNeeded(){
 
         stage = newStage;
 
-        clearObjects();
+        clearAll();
 
         obstacleTimer = 0;
         birdTimer = 0;
 
-        playerY = 0;
-        velocityY = 0;
+        y = 0;
+        velocity = 0;
 
         jumping = false;
         ducking = false;
 
         player.classList.remove("duck");
 
-        player.style.transform =
-            "translateY(0)";
-
         updateStage();
-
-        showStageMessage();
     }
-}
 
 
-/* ================= STAGE MESSAGE ================= */
+    /* OBSTACLES */
 
-function showStageMessage(){
+    if(stage !== 3){
 
-    message.style.display =
-        "block";
+        obstacleTimer += dt;
 
-    message.textContent =
-        "STAGE " + stage;
-
-
-    setTimeout(
-        function(){
-
-            if(!gameOver){
-
-                message.style.display =
-                    "none";
-            }
-
-        },
-        1200
-    );
-}
-
-
-/* ================= OBSTACLES ================= */
-
-function updateObstacles(delta){
-
-    if(stage === 3)
-        return;
-
-
-    obstacleTimer += delta;
-
-
-    let spawnTime;
-
-
-    if(stage <= 5){
-
-        spawnTime =
-            stage === 1
-            ? 100
-            : 115;
-
-    }else{
-
-        spawnTime =
-            Math.max(
+        let spawn =
+            stage <= 5
+            ? 110
+            : Math.max(
                 55,
-                115 -
+                110 -
                 (stage - 5) * 3
             );
-    }
 
 
-    if(obstacleTimer >= spawnTime){
+        if(obstacleTimer >= spawn){
 
-        obstacleTimer = 0;
+            obstacleTimer = 0;
 
-        createObstacle();
-    }
-
-
-    const speed =
-        getGameSpeed();
-
-    const playerBox =
-        getPlayerBox();
+            createObstacle();
+        }
 
 
-    for(
-        let i = obstacles.length - 1;
-        i >= 0;
-        i--
-    ){
-
-        const o =
-            obstacles[i];
-
-        o.x -=
-            speed * delta;
-
-        o.style.left =
-            o.x + "px";
+        let speed =
+            stage <= 5
+            ? 5 + (stage - 1) * .35
+            : 6.4 + (stage - 5) * .5;
 
 
-        const obstacleBox =
-            getObstacleBox(o);
+        const p =
+            playerBox();
 
 
-        if(
-            collision(
-                playerBox,
-                obstacleBox
-            )
+        for(
+            let i=obstacles.length-1;
+            i>=0;
+            i--
         ){
 
-            endGame();
+            const o =
+                obstacles[i];
 
-            return;
-        }
+            o.x -=
+                speed * dt;
+
+            o.style.left =
+                o.x + "px";
 
 
-        if(o.x < -80){
+            const ob = {
 
-            o.remove();
+                left:o.x + 5,
 
-            obstacles.splice(i,1);
+                right:o.x + 37,
 
-            score += 5;
+                top:
+                    game.clientHeight *
+                    .82 -
+                    65,
+
+                bottom:
+                    game.clientHeight *
+                    .82
+            };
+
+
+            if(
+                hit(p,ob)
+            ){
+
+                endGame();
+
+                return;
+            }
+
+
+            if(o.x < -80){
+
+                o.remove();
+
+                obstacles.splice(i,1);
+
+                score += 5;
+            }
         }
     }
-}
 
 
-/* ================= BULLETS ================= */
-
-function updateBullets(delta){
+    /* BULLETS */
 
     for(
-        let i = bullets.length - 1;
-        i >= 0;
+        let i=bullets.length-1;
+        i>=0;
         i--
     ){
 
@@ -1214,18 +1118,15 @@ function updateBullets(delta){
             bullets[i];
 
         b.x +=
-            12 * delta;
+            12 * dt;
 
         b.style.left =
             b.x + "px";
 
 
-        let hit = false;
-
-
         for(
-            let j = obstacles.length - 1;
-            j >= 0;
+            let j=obstacles.length-1;
+            j>=0;
             j--
         ){
 
@@ -1240,19 +1141,14 @@ function updateBullets(delta){
 
                 o.hp--;
 
-
-                if(o.hpText){
-
-                    o.hpText.textContent =
+                if(o.hpElement)
+                    o.hpElement.textContent =
                         o.hp;
-                }
 
 
                 b.remove();
 
                 bullets.splice(i,1);
-
-                hit = true;
 
 
                 if(o.hp <= 0){
@@ -1269,13 +1165,9 @@ function updateBullets(delta){
         }
 
 
-        if(hit)
-            continue;
-
-
         if(
-            b.x >
-            window.innerWidth
+            i < bullets.length &&
+            b.x > window.innerWidth
         ){
 
             b.remove();
@@ -1283,91 +1175,125 @@ function updateBullets(delta){
             bullets.splice(i,1);
         }
     }
-}
 
 
-/* ================= BIRDS ================= */
+    /* BIRDS */
 
-function updateBirds(delta){
+    if(stage === 3){
 
-    if(stage !== 3)
-        return;
-
-
-    birdTimer += delta;
+        birdTimer += dt;
 
 
-    if(birdTimer >= 90){
+        if(birdTimer >= 90){
 
-        birdTimer = 0;
+            birdTimer = 0;
 
-        createBird();
-    }
-
-
-    const birdSpeed =
-        stage <= 5
-        ? 6
-        : 6 +
-          (stage - 5) * 0.5;
+            createBird();
+        }
 
 
-    const playerBox =
-        getPlayerBox();
+        const p =
+            playerBox();
 
 
-    for(
-        let i = birds.length - 1;
-        i >= 0;
-        i--
-    ){
-
-        const b =
-            birds[i];
-
-        b.x -=
-            birdSpeed * delta;
-
-        b.style.left =
-            b.x + "px";
-
-
-        const birdBox =
-            getBirdBox(b);
-
-
-        if(
-            collision(
-                playerBox,
-                birdBox
-            )
+        for(
+            let i=birds.length-1;
+            i>=0;
+            i--
         ){
 
-            endGame();
+            const b =
+                birds[i];
 
-            return;
-        }
+            b.x -=
+                6 * dt;
+
+            b.style.left =
+                b.x + "px";
 
 
-        if(b.x < -80){
+            const bb = {
 
-            b.remove();
+                left:b.x + 10,
+                right:b.x + 43,
+                top:b.y + 10,
+                bottom:b.y + 34
+            };
 
-            birds.splice(i,1);
 
-            score += 5;
+            if(hit(p,bb)){
+
+                endGame();
+
+                return;
+            }
+
+
+            if(b.x < -80){
+
+                b.remove();
+
+                birds.splice(i,1);
+
+                score += 5;
+            }
         }
     }
+
+
+    requestAnimationFrame(loop);
 }
 
 
-/* ================= GAME OVER ================= */
+/* =========================
+   GAME OVER
+========================= */
 
 function endGame(){
 
-    if(gameOver)
+    if(dead)
         return;
 
-    gameOver = true;
+    dead = true;
+    running = false;
 
-    message.styl
+    gameOverText.innerHTML =
+        "GAME OVER<br>" +
+        "<span style='font-size:22px'>" +
+        "SCORE: " +
+        Math.floor(score) +
+        "<br><br>TAP TO RESTART" +
+        "</span>";
+
+    gameOverText.style.display =
+        "block";
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+game.addEventListener(
+    "pointerdown",
+    function(){
+
+        if(dead){
+
+            start();
+        }
+    }
+);
+
+
+/* =========================
+   START IMMEDIATELY
+========================= */
+
+updateStage();
+start();
+
+</script>
+
+</body>
+    </html>
