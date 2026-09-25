@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dog Jump</title>
+<title>Dog Runner</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -29,71 +27,121 @@ html,body{
     width:100vw;
     height:100vh;
     overflow:hidden;
-
     background:linear-gradient(
-        #70c9ff,
-        #dff6ff 75%,
+        #70caff,
+        #dff7ff 75%,
         #ffffff
     );
 }
 
+/* =========================
+   START SCREEN
+========================= */
 
-/* الشمس */
-
-#sun{
+#startScreen{
     position:absolute;
+    inset:0;
+    z-index:500;
 
-    top:35px;
-    right:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
 
-    width:70px;
+    background:
+        linear-gradient(
+            135deg,
+            #071c35,
+            #123e68
+        );
+
+    color:white;
+}
+
+#startScreen h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+#startScreen p{
+    color:#c8d8e8;
+    margin-bottom:30px;
+}
+
+#playButton{
+    width:190px;
     height:70px;
 
-    background:#ffd83d;
+    border:none;
+    border-radius:40px;
 
-    border-radius:50%;
+    background:#e53935;
+    color:white;
+
+    font-size:28px;
+    font-weight:bold;
+
+    box-shadow:0 7px 0 #9e1b18;
+}
+
+#playButton:active{
+    transform:translateY(5px);
+    box-shadow:0 2px 0 #9e1b18;
 }
 
 
-/* SCORE */
+/* =========================
+   HUD
+========================= */
 
-#score{
+#hud{
     position:absolute;
+    top:15px;
+    left:15px;
 
-    top:20px;
-    left:20px;
-
-    font-size:25px;
-    font-weight:bold;
+    z-index:100;
 
     color:#111;
 
-    z-index:50;
+    font-size:21px;
+    font-weight:bold;
+
+    line-height:1.5;
 }
 
 
-/* DOG */
+/* =========================
+   DOG
+========================= */
 
-#dog{
+#player{
     position:absolute;
 
-    left:80px;
+    left:75px;
     bottom:95px;
 
-    width:65px;
-    height:65px;
-
-    font-size:56px;
+    width:75px;
+    height:75px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    z-index:20;
+    font-size:60px;
+
+    z-index:50;
+
+    transition:height .1s;
+}
+
+#player.duck{
+    transform:translateY(25px) scaleY(.7);
 }
 
 
-/* GROUND */
+/* =========================
+   GROUND
+========================= */
 
 #ground{
     position:absolute;
@@ -107,10 +155,14 @@ html,body{
     background:#4caf50;
 
     border-top:7px solid #286e2c;
+
+    z-index:20;
 }
 
 
-/* WALL */
+/* =========================
+   WALL
+========================= */
 
 .wall{
     position:absolute;
@@ -119,9 +171,6 @@ html,body{
     bottom:95px;
 
     width:58px;
-
-    /* نقصنا العلو */
-
     height:65px;
 
     background:
@@ -137,94 +186,158 @@ html,body{
 
     border-radius:4px;
 
-    z-index:10;
+    z-index:30;
+}
+
+.wall.health{
+    position:absolute;
+}
+
+.healthBar{
+    position:absolute;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    top:-18px;
+
+    width:55px;
+    height:8px;
+
+    background:#222;
+
+    border-radius:5px;
+
+    overflow:hidden;
+}
+
+.healthFill{
+    height:100%;
+    width:100%;
+    background:#e53935;
 }
 
 
-/* JUMP BUTTON */
+/* =========================
+   SOLDIER
+========================= */
 
-#jump{
-
+.bullet{
     position:absolute;
 
-    right:25px;
+    width:13px;
+    height:5px;
 
-    /* طلعناه شوية */
+    background:#ffd54a;
 
-    bottom:120px;
+    border-radius:5px;
 
-    width:145px;
-    height:68px;
+    z-index:80;
+}
+
+
+/* =========================
+   BIRDS
+========================= */
+
+.bird{
+    position:absolute;
+
+    right:-80px;
+
+    font-size:48px;
+
+    z-index:35;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.controls{
+    position:absolute;
+
+    bottom:115px;
+    right:20px;
+
+    display:flex;
+    gap:10px;
+
+    z-index:150;
+}
+
+.gameButton{
+    width:125px;
+    height:60px;
 
     border:none;
-
-    border-radius:35px;
-
-    background:#e53935;
+    border-radius:30px;
 
     color:white;
 
-    font-size:22px;
-
+    font-size:19px;
     font-weight:bold;
 
-    z-index:100;
-
-    box-shadow:
-        0 6px 0 #a71916;
+    box-shadow:0 5px 0 rgba(0,0,0,.3);
 }
 
-#jump:active{
+#jumpButton{
+    background:#e53935;
+}
 
-    transform:translateY(5px);
+#shootButton{
+    background:#263238;
+    display:none;
+}
 
-    box-shadow:
-        0 1px 0 #a71916;
+#duckButton{
+    background:#1976d2;
+    display:none;
+}
+
+.gameButton:active{
+    transform:translateY(4px);
+    box-shadow:0 1px 0 rgba(0,0,0,.3);
 }
 
 
-/* GAME OVER */
+/* =========================
+   GAME OVER
+========================= */
 
 #gameOver{
-
     position:absolute;
-
     inset:0;
+
+    z-index:400;
 
     display:none;
 
     align-items:center;
     justify-content:center;
-
     flex-direction:column;
 
-    background:rgba(0,0,0,.72);
+    background:rgba(0,0,0,.75);
 
     color:white;
-
-    z-index:200;
 }
 
 #gameOver h1{
-
-    font-size:44px;
-
-    margin-bottom:12px;
+    font-size:45px;
+    margin-bottom:10px;
 }
 
-#finalScore{
-
-    font-size:23px;
+#gameOver p{
+    font-size:22px;
 }
 
 #restart{
-
-    margin-top:22px;
+    margin-top:25px;
 
     padding:14px 35px;
 
     border:none;
-
     border-radius:30px;
 
     background:#2196f3;
@@ -232,33 +345,163 @@ html,body{
     color:white;
 
     font-size:20px;
-
     font-weight:bold;
 }
 
+
+/* =========================
+   STAGE MESSAGE
+========================= */
+
+#stageMessage{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:300;
+
+    display:none;
+
+    padding:25px 35px;
+
+    border-radius:20px;
+
+    background:rgba(0,0,0,.75);
+
+    color:white;
+
+    text-align:center;
+}
+
+#stageMessage h2{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+#stageMessage p{
+    color:#ddd;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    #startScreen h1{
+        font-size:40px;
+    }
+
+    #player{
+        left:55px;
+    }
+
+    .controls{
+        right:12px;
+        bottom:115px;
+    }
+
+    .gameButton{
+        width:115px;
+        height:58px;
+        font-size:17px;
+    }
+}
 </style>
 </head>
-
 
 <body>
 
 <div id="game">
 
-    <div id="sun"></div>
+    <!-- START -->
 
-    <div id="score">
-        Score: 0
+    <div id="startScreen">
+
+        <h1>🐕 DOG RUNNER</h1>
+
+        <p>
+            Jump • Shoot • Duck
+        </p>
+
+        <button id="playButton">
+            PLAY ▶
+        </button>
+
     </div>
 
-    <div id="dog">
+
+    <!-- HUD -->
+
+    <div id="hud">
+
+        Score: <span id="score">0</span><br>
+
+        Stage: <span id="stage">1</span>
+
+    </div>
+
+
+    <!-- PLAYER -->
+
+    <div id="player">
         🐕
     </div>
 
+
+    <!-- GROUND -->
+
     <div id="ground"></div>
 
-    <button id="jump">
-        JUMP 🦘
-    </button>
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+        <button
+            id="jumpButton"
+            class="gameButton"
+        >
+            JUMP 🦘
+        </button>
+
+        <button
+            id="shootButton"
+            class="gameButton"
+        >
+            SHOOT 🔫
+        </button>
+
+        <button
+            id="duckButton"
+            class="gameButton"
+        >
+            DUCK 🔽
+        </button>
+
+    </div>
+
+
+    <!-- STAGE MESSAGE -->
+
+    <div id="stageMessage">
+
+        <h2 id="stageTitle">
+            STAGE 2
+        </h2>
+
+        <p id="stageText">
+            Soldier Mode 🔫
+        </p>
+
+    </div>
+
+
+    <!-- GAME OVER -->
 
     <div id="gameOver">
 
@@ -266,9 +509,10 @@ html,body{
             GAME OVER 💥
         </h1>
 
-        <div id="finalScore">
-            Score: 0
-        </div>
+        <p>
+            Score:
+            <span id="finalScore">0</span>
+        </p>
 
         <button id="restart">
             RESTART 🔄
@@ -285,19 +529,34 @@ html,body{
    ELEMENTS
 ========================= */
 
-const dog =
-    document.getElementById("dog");
+const player =
+    document.getElementById("player");
 
 const game =
     document.getElementById("game");
 
-const jumpButton =
-    document.getElementById("jump");
-
-const scoreText =
+const scoreElement =
     document.getElementById("score");
 
-const gameOverScreen =
+const stageElement =
+    document.getElementById("stage");
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const playButton =
+    document.getElementById("playButton");
+
+const jumpButton =
+    document.getElementById("jumpButton");
+
+const shootButton =
+    document.getElementById("shootButton");
+
+const duckButton =
+    document.getElementById("duckButton");
+
+const gameOver =
     document.getElementById("gameOver");
 
 const finalScore =
@@ -306,70 +565,85 @@ const finalScore =
 const restart =
     document.getElementById("restart");
 
+const stageMessage =
+    document.getElementById("stageMessage");
+
+const stageTitle =
+    document.getElementById("stageTitle");
+
+const stageText =
+    document.getElementById("stageText");
+
 
 /* =========================
-   GAME VARIABLES
+   VARIABLES
 ========================= */
 
-let playing = true;
+let playing = false;
 
-let dogY = 0;
+let score = 0;
+
+let stage = 1;
+
+let playerY = 0;
 
 let velocity = 0;
 
 let jumping = false;
+
+let ducking = false;
+
+let speed = 5;
+
+let spawnTimer = 0;
+
+let nextSpawn = 140;
+
+let objects = [];
+
+let bullets = [];
 
 
 /* =========================
    PHYSICS
 ========================= */
 
-/* القفزة الجديدة */
+const gravity = .75;
 
 const jumpPower = 13;
-
-const gravity = 0.75;
-
-
-/* سرعة اللعبة */
-
-let speed = 5;
-
-
-/* Score */
-
-let score = 0;
-
-
-/* الأسوار */
-
-let walls = [];
-
-
-/* Timer */
-
-let spawnTimer = 0;
-
-
-/*
-   مسافة أكبر شوية
-   بين الأسوار
-*/
-
-let nextWall =
-    randomBetween(135,195);
 
 
 /* =========================
    RANDOM
 ========================= */
 
-function randomBetween(min,max){
+function random(min,max){
 
     return Math.floor(
         Math.random() *
-        (max - min + 1)
+        (max-min+1)
     ) + min;
+}
+
+
+/* =========================
+   PLAY
+========================= */
+
+playButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+function startGame(){
+
+    startScreen.style.display =
+        "none";
+
+    playing = true;
+
+    gameLoop();
 }
 
 
@@ -382,6 +656,9 @@ function jump(){
     if(!playing)
         return;
 
+    if(stage !== 1)
+        return;
+
     if(jumping)
         return;
 
@@ -391,7 +668,77 @@ function jump(){
 }
 
 
-/* الهاتف */
+/* =========================
+   DUCK
+========================= */
+
+function startDuck(){
+
+    if(!playing)
+        return;
+
+    if(stage < 3)
+        return;
+
+    ducking = true;
+
+    player.classList.add("duck");
+}
+
+
+function stopDuck(){
+
+    ducking = false;
+
+    player.classList.remove("duck");
+}
+
+
+/* =========================
+   SHOOT
+========================= */
+
+function shoot(){
+
+    if(!playing)
+        return;
+
+    if(stage !== 2)
+        return;
+
+
+    const bullet =
+        document.createElement("div");
+
+    bullet.className =
+        "bullet";
+
+    const playerBox =
+        player.getBoundingClientRect();
+
+
+    bullet.style.left =
+        (playerBox.right - 5) + "px";
+
+    bullet.style.top =
+        (playerBox.top + 32) + "px";
+
+
+    game.appendChild(bullet);
+
+    bullets.push({
+
+        element:bullet,
+
+        x:playerBox.right
+
+    });
+}
+
+
+/* =========================
+   BUTTON EVENTS
+========================= */
 
 jumpButton.addEventListener(
     "touchstart",
@@ -405,16 +752,67 @@ jumpButton.addEventListener(
     {passive:false}
 );
 
-
-/* الضغط العادي */
-
 jumpButton.addEventListener(
     "click",
     jump
 );
 
 
-/* الكمبيوتر */
+shootButton.addEventListener(
+    "touchstart",
+    function(e){
+
+        e.preventDefault();
+
+        shoot();
+
+    },
+    {passive:false}
+);
+
+shootButton.addEventListener(
+    "click",
+    shoot
+);
+
+
+duckButton.addEventListener(
+    "touchstart",
+    function(e){
+
+        e.preventDefault();
+
+        startDuck();
+
+    },
+    {passive:false}
+);
+
+duckButton.addEventListener(
+    "touchend",
+    function(e){
+
+        e.preventDefault();
+
+        stopDuck();
+
+    },
+    {passive:false}
+);
+
+
+duckButton.addEventListener(
+    "mousedown",
+    startDuck
+);
+
+duckButton.addEventListener(
+    "mouseup",
+    stopDuck
+);
+
+
+/* KEYBOARD */
 
 document.addEventListener(
     "keydown",
@@ -425,9 +823,38 @@ document.addEventListener(
             e.code === "ArrowUp"
         ){
 
-            e.preventDefault();
-
             jump();
+        }
+
+
+        if(
+            e.code === "ArrowDown"
+        ){
+
+            startDuck();
+        }
+
+
+        if(
+            e.code === "KeyX"
+        ){
+
+            shoot();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    function(e){
+
+        if(
+            e.code === "ArrowDown"
+        ){
+
+            stopDuck();
         }
 
     }
@@ -435,7 +862,30 @@ document.addEventListener(
 
 
 /* =========================
-   CREATE WALL
+   SPAWN OBJECT
+========================= */
+
+function spawnObject(){
+
+    if(stage === 1 ||
+       stage === 2){
+
+        createWall();
+
+    }
+
+
+    if(stage === 3){
+
+        createBird();
+
+    }
+
+}
+
+
+/* =========================
+   WALL
 ========================= */
 
 function createWall(){
@@ -449,15 +899,99 @@ function createWall(){
     wall.style.right =
         "-80px";
 
+
+    /*
+       Stage 2 = خشبة عندها 3 HP
+    */
+
+    if(stage === 2){
+
+        wall.dataset.hp = "3";
+
+
+        const bar =
+            document.createElement("div");
+
+        bar.className =
+            "healthBar";
+
+
+        const fill =
+            document.createElement("div");
+
+        fill.className =
+            "healthFill";
+
+
+        bar.appendChild(fill);
+
+        wall.appendChild(bar);
+
+    }
+
+
     game.appendChild(wall);
 
-    walls.push({
+
+    objects.push({
 
         element:wall,
+
+        type:"wall",
+
+        hp:stage === 2 ? 3 : 1,
 
         passed:false
 
     });
+
+}
+
+
+/* =========================
+   BIRD
+========================= */
+
+function createBird(){
+
+    const bird =
+        document.createElement("div");
+
+    bird.className =
+        "bird";
+
+    bird.textContent =
+        "🐦";
+
+
+    /*
+       العصافير على مستوى
+       رأس الكلب تقريباً
+    */
+
+    const height =
+        random(145,230);
+
+    bird.style.top =
+        height + "px";
+
+    bird.style.right =
+        "-80px";
+
+
+    game.appendChild(bird);
+
+
+    objects.push({
+
+        element:bird,
+
+        type:"bird",
+
+        passed:false
+
+    });
+
 }
 
 
@@ -465,91 +999,381 @@ function createWall(){
    COLLISION
 ========================= */
 
-function checkCollision(){
+function collision(a,b){
 
-    const dogBox =
-        dog.getBoundingClientRect();
+    const A =
+        a.getBoundingClientRect();
 
-
-    /*
-       Hitbox أصغر من الكلب
-    */
-
-    const dogLeft =
-        dogBox.left + 18;
-
-    const dogRight =
-        dogBox.right - 18;
-
-    const dogTop =
-        dogBox.top + 12;
-
-    const dogBottom =
-        dogBox.bottom - 7;
+    const B =
+        b.getBoundingClientRect();
 
 
-    for(const wall of walls){
+    return (
+        A.left < B.right &&
+        A.right > B.left &&
+        A.top < B.bottom &&
+        A.bottom > B.top
+    );
+}
 
-        const wallBox =
-            wall.element.getBoundingClientRect();
+
+/* =========================
+   PLAYER COLLISION
+========================= */
+
+function checkObjects(){
+
+    for(let i=objects.length-1;i>=0;i--){
+
+        const obj =
+            objects[i];
+
+        const element =
+            obj.element;
 
 
         /*
-           السور بعيد
-           ما نديروش collision
+           غير ملي object قريب
         */
 
+        const box =
+            element.getBoundingClientRect();
+
+        const playerBox =
+            player.getBoundingClientRect();
+
+
         if(
-            wallBox.left >
-            dogRight + 5
+            box.left >
+            playerBox.right + 20
         ){
 
             continue;
+
         }
 
 
-        /*
-           السور داز
-        */
-
         if(
-            wallBox.right <
-            dogLeft
+            box.right <
+            playerBox.left
         ){
 
             continue;
+
         }
 
 
-        /*
-           الاصطدام الحقيقي
-        */
-
-        const horizontal =
-            dogRight >
-            wallBox.left &&
-            dogLeft <
-            wallBox.right;
-
-
-        const vertical =
-            dogBottom >
-            wallBox.top &&
-            dogTop <
-            wallBox.bottom;
-
+        /* WALL */
 
         if(
-            horizontal &&
-            vertical
+            obj.type === "wall"
         ){
 
-            return true;
+            if(
+                collision(
+                    player,
+                    element
+                )
+            ){
+
+                endGame();
+
+                return;
+
+            }
+
+        }
+
+
+        /* BIRD */
+
+        if(
+            obj.type === "bird"
+        ){
+
+            /*
+               إلا كان Duck
+               العصفور كيدوز
+            */
+
+            if(
+                !ducking &&
+                collision(
+                    player,
+                    element
+                )
+            ){
+
+                endGame();
+
+                return;
+
+            }
+
         }
 
     }
 
-    return false;
+}
+
+
+/* =========================
+   BULLET COLLISION
+========================= */
+
+function checkBullets(){
+
+    for(
+        let i=bullets.length-1;
+        i>=0;
+        i--
+    ){
+
+        const bullet =
+            bullets[i];
+
+
+        let x =
+            parseFloat(
+                bullet.element.style.left
+            );
+
+
+        x += 12;
+
+
+        bullet.element.style.left =
+            x + "px";
+
+
+        for(
+            let j=objects.length-1;
+            j>=0;
+            j--
+        ){
+
+            const obj =
+                objects[j];
+
+
+            if(
+                obj.type !== "wall"
+            ){
+
+                continue;
+
+            }
+
+
+            if(
+                collision(
+                    bullet.element,
+                    obj.element
+                )
+            ){
+
+                obj.hp--;
+
+
+                /*
+                   تحديث HP
+                */
+
+                const fill =
+                    obj.element
+                    .querySelector(
+                        ".healthFill"
+                    );
+
+
+                if(fill){
+
+                    fill.style.width =
+                        (obj.hp / 3 * 100)
+                        + "%";
+
+                }
+
+
+                /*
+                   الخشبة تهرست
+                */
+
+                if(obj.hp <= 0){
+
+                    obj.element.remove();
+
+                    objects.splice(j,1);
+
+                }
+
+
+                bullet.element.remove();
+
+                bullets.splice(i,1);
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+           حذف الرصاصة
+        */
+
+        if(
+            x >
+            window.innerWidth + 100
+        ){
+
+            bullet.element.remove();
+
+            bullets.splice(i,1);
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   STAGE
+========================= */
+
+function updateStage(){
+
+    const newStage =
+        Math.floor(score / 50) + 1;
+
+
+    if(
+        newStage !== stage
+    ){
+
+        stage =
+            newStage;
+
+        stageElement.textContent =
+            stage;
+
+
+        showStage();
+
+
+        /*
+           تغيير الأدوات
+        */
+
+        if(stage === 1){
+
+            jumpButton.style.display =
+                "block";
+
+            shootButton.style.display =
+                "none";
+
+            duckButton.style.display =
+                "none";
+
+            player.textContent =
+                "🐕";
+        }
+
+
+        if(stage === 2){
+
+            jumpButton.style.display =
+                "none";
+
+            shootButton.style.display =
+                "block";
+
+            duckButton.style.display =
+                "none";
+
+            player.textContent =
+                "🪖🔫";
+
+        }
+
+
+        if(stage >= 3){
+
+            jumpButton.style.display =
+                "none";
+
+            shootButton.style.display =
+                "none";
+
+            duckButton.style.display =
+                "block";
+
+            player.textContent =
+                "🐕";
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   STAGE MESSAGE
+========================= */
+
+function showStage(){
+
+    stageMessage.style.display =
+        "block";
+
+
+    if(stage === 2){
+
+        stageTitle.textContent =
+            "STAGE 2 🔫";
+
+        stageText.textContent =
+            "Soldier Mode — Destroy the walls!";
+
+    }
+
+
+    if(stage === 3){
+
+        stageTitle.textContent =
+            "STAGE 3 🐦";
+
+        stageText.textContent =
+            "Duck and avoid the birds!";
+
+    }
+
+
+    if(stage > 3){
+
+        stageTitle.textContent =
+            "STAGE " + stage;
+
+        stageText.textContent =
+            "New challenge!";
+
+    }
+
+
+    setTimeout(
+        function(){
+
+            stageMessage.style.display =
+                "none";
+
+        },
+        1800
+    );
+
 }
 
 
@@ -562,178 +1386,10 @@ function endGame(){
     playing = false;
 
     finalScore.textContent =
-        "Score: " +
         Math.floor(score);
 
-    gameOverScreen.style.display =
+    gameOver.style.display =
         "flex";
-}
-
-
-/* =========================
-   GAME LOOP
-========================= */
-
-function update(){
-
-    if(!playing)
-        return;
-
-
-    /* =====================
-       DOG PHYSICS
-    ===================== */
-
-    if(jumping){
-
-        dogY += velocity;
-
-        velocity -= gravity;
-
-
-        /*
-           يرجع للأرض
-        */
-
-        if(dogY <= 0){
-
-            dogY = 0;
-
-            velocity = 0;
-
-            jumping = false;
-        }
-    }
-
-
-    dog.style.bottom =
-        (95 + dogY) + "px";
-
-
-    /* =====================
-       SPAWN WALL
-    ===================== */
-
-    spawnTimer++;
-
-
-    if(
-        spawnTimer >=
-        nextWall
-    ){
-
-        createWall();
-
-        spawnTimer = 0;
-
-
-        /*
-           مسافة عشوائية
-        */
-
-        nextWall =
-            randomBetween(
-                135,
-                195
-            );
-    }
-
-
-    /* =====================
-       MOVE WALLS
-    ===================== */
-
-    for(
-        let i = walls.length - 1;
-        i >= 0;
-        i--
-    ){
-
-        const wall =
-            walls[i];
-
-        const element =
-            wall.element;
-
-
-        let right =
-            parseFloat(
-                getComputedStyle(
-                    element
-                ).right
-            );
-
-
-        right += speed;
-
-
-        element.style.right =
-            right + "px";
-
-
-        /* Collision */
-
-        if(checkCollision()){
-
-            endGame();
-
-            return;
-        }
-
-
-        /* =================
-           SCORE
-        ================= */
-
-        const wallBox =
-            element.getBoundingClientRect();
-
-        const dogBox =
-            dog.getBoundingClientRect();
-
-
-        if(
-            !wall.passed &&
-            wallBox.right <
-            dogBox.left
-        ){
-
-            wall.passed = true;
-
-            score += 10;
-        }
-
-
-        /* حذف السور */
-
-        if(
-            right >
-            window.innerWidth + 100
-        ){
-
-            element.remove();
-
-            walls.splice(i,1);
-        }
-    }
-
-
-    /* Score مع الوقت */
-
-    score += 0.02;
-
-
-    scoreText.textContent =
-        "Score: " +
-        Math.floor(score);
-
-
-    /* زيادة الصعوبة ببطء */
-
-    speed += 0.0002;
-
-
-    requestAnimationFrame(update);
 }
 
 
@@ -752,12 +1408,111 @@ restart.addEventListener(
 
 
 /* =========================
-   START
+   GAME LOOP
 ========================= */
 
-update();
+function gameLoop(){
 
-</script>
+    if(!playing)
+        return;
 
-</body>
-    </html>
+
+    /* =====================
+       STAGE
+    ===================== */
+
+    updateStage();
+
+
+    /* =====================
+       DOG JUMP
+    ===================== */
+
+    if(stage === 1){
+
+        if(jumping){
+
+            playerY += velocity;
+
+            velocity -= gravity;
+
+
+            if(playerY <= 0){
+
+                playerY = 0;
+
+                velocity = 0;
+
+                jumping = false;
+
+            }
+
+        }
+
+    }
+    else{
+
+        playerY = 0;
+
+        jumping = false;
+
+    }
+
+
+    player.style.bottom =
+        (95 + playerY) + "px";
+
+
+    /* =====================
+       SPAWN
+    ===================== */
+
+    spawnTimer++;
+
+
+    if(
+        spawnTimer >=
+        nextSpawn
+    ){
+
+        spawnObject();
+
+        spawnTimer = 0;
+
+
+        if(stage === 3){
+
+            nextSpawn =
+                random(110,170);
+
+        }
+        else{
+
+            nextSpawn =
+                random(135,195);
+
+        }
+
+    }
+
+
+    /* =====================
+       MOVE OBJECTS
+    ===================== */
+
+    for(
+        let i=objects.length-1;
+        i>=0;
+        i--
+    ){
+
+        const obj =
+            objects[i];
+
+        const element =
+            obj.element;
+
+
+        let right =
+            parseFloat(
+                getComp
